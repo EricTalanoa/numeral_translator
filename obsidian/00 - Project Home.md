@@ -1,6 +1,6 @@
 # Numeral Translator — Project Home
 
-## Status: Planning Phase
+## Status: Phase 1 Complete
 **Last updated:** 2026-04-12
 
 ---
@@ -29,12 +29,30 @@
 `https://github.com/EricTalanoa/numeral_translator.git`
 
 ## Current Blockers
-*None — awaiting user approval of plan before Phase 0 scaffolding.*
+- Download Noto Sans Egyptian Hieroglyphs font before Phase 2 starts (see [[Phase Checklist]])
 
 ---
 
 ## Session Log
 *(Newest at top — append only)*
+
+### 2026-04-12 — Phase 1 complete
+- All 7 converters implemented with full test suites (225 tests total, all passing)
+- Egyptian, Ionian, Attic, Babylonian, Roman, Mayan, Chinese Rod converters done
+- MayanSvg.tsx and BabylonianSvg.tsx SVG renderers implemented
+- vision-client.ts implemented (recognizeNumeral with prompt engineering for all 7 systems)
+- TypeScript clean (`npx tsc --noEmit` zero errors)
+- Note on Chinese Rod: `fromArabic(10)` returns `𝍩〇` (H1+ZERO) — trailing zero needed for round-trips
+- **Next: Phase 2** — UI layer (App, InputPanel, PhotoPanel, OutputGrid, NumeralTile, etc.)
+
+### 2026-04-12 — Phase 0 complete
+- Phase 0 scaffolding done: Vite + React + TypeScript + Vitest set up
+- All 7 converter stubs, renderer stubs, vision stub created
+- CONVERTERS registry locked, 3/3 smoke tests passing
+- TypeScript clean, dev server running
+- Initial commit pushed to GitHub (merged with existing README)
+- `claude.md` trimmed to brief status doc — full detail in Obsidian
+- **Next: Phase 1** — spawn all converter + renderer + vision agents in parallel
 
 ### 2026-04-12 — Planning session
 - Read and understood full project brief (CLAUDE.md)
@@ -47,4 +65,4 @@
   - Chinese system: **counting rod numerals** (U+1D360–U+1D371), not regular Chinese numerals
   - Security: repo is public; API key lives in `.env.local` (gitignored), never committed
 - Built Obsidian vault (all folders and notes populated)
-- Status: vault complete, awaiting user review before implementation
+- Egyptian hieroglyph codepoints verified against Unicode names list

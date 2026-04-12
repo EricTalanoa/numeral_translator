@@ -1,0 +1,42 @@
+import { describe, it, expect } from 'vitest'
+import { fromArabic, toArabic } from '../../src/converters/egyptian'
+
+// Use codepoint literals for SMP characters to avoid editor encoding issues
+const LOTUS  = '\u{131BC}' // 1000
+const ROPE   = '\u{13362}' // 100
+const HOBBLE = '\u{13386}' // 10
+const STROKE = '\u{133FA}' // 1
+const EMPTY  = '\u2205'    // ∅
+
+describe('Egyptian — fromArabic', () => {
+  it('0 → ∅', () => expect(fromArabic(0)).toBe(EMPTY))
+  it('1 → single stroke', () => expect(fromArabic(1)).toBe(STROKE))
+  it('10 → single hobble', () => expect(fromArabic(10)).toBe(HOBBLE))
+  it('100 → single rope', () => expect(fromArabic(100)).toBe(ROPE))
+  it('1000 → single lotus', () => expect(fromArabic(1000)).toBe(LOTUS))
+  it('23 → 2 hobbles + 3 strokes', () => expect(fromArabic(23)).toBe(HOBBLE.repeat(2) + STROKE.repeat(3)))
+  it('305 → 3 ropes + 5 strokes', () => expect(fromArabic(305)).toBe(ROPE.repeat(3) + STROKE.repeat(5)))
+  it('1492 → 1 lotus + 4 ropes + 9 hobbles + 2 strokes', () =>
+    expect(fromArabic(1492)).toBe(LOTUS + ROPE.repeat(4) + HOBBLE.repeat(9) + STROKE.repeat(2)))
+  it('3999 → max: 3 lotus + 9 rope + 9 hobble + 9 stroke', () =>
+    expect(fromArabic(3999)).toBe(LOTUS.repeat(3) + ROPE.repeat(9) + HOBBLE.repeat(9) + STROKE.repeat(9)))
+  it('throws on non-integer', () => expect(() => fromArabic(1.5)).toThrow('Input must be an integer'))
+  it('throws on 4000', () => expect(() => fromArabic(4000)).toThrow('Out of range: 4000'))
+  it('throws on -1', () => expect(() => fromArabic(-1)).toThrow('Out of range: -1'))
+})
+
+describe('Egyptian — toArabic', () => {
+  it('single stroke → 1', () => expect(toArabic(STROKE)).toBe(1))
+  it('single hobble → 10', () => expect(toArabic(HOBBLE)).toBe(10))
+  it('single rope → 100', () => expect(toArabic(ROPE)).toBe(100))
+  it('single lotus → 1000', () => expect(toArabic(LOTUS)).toBe(1000))
+  it('throws on fractional "3.5"', () => expect(() => toArabic('3.5')).toThrow('Fractions not supported'))
+  it('throws on invalid character', () => expect(() => toArabic('X')).toThrow('Cannot parse'))
+})
+
+describe('Egyptian — round-trips', () => {
+  const cases = [1, 10, 100, 1000, 23, 305, 1492, 3999]
+  for (const n of cases) {
+    it(`round-trip ${n}`, () => expect(toArabic(fromArabic(n))).toBe(n))
+  }
+})
