@@ -29,18 +29,18 @@ export function NumeralTile({ system, value }: NumeralTileProps) {
 
     const output = system.fromArabic(value)
 
-    // SVG renderers handle their own zero/∅ sentinel internally
+    // ∅ check must come first — all systems except Mayan return '∅' for zero.
+    // Mayan returns 'shell' for zero, so the SVG path below is safe.
+    if (output === '∅') {
+      return <span className="tile-no-rep">No representation</span>
+    }
+
     if (system.id === 'mayan') {
       return <MayanSvg encoded={output} />
     }
 
     if (system.id === 'babylonian') {
       return <BabylonianSvg encoded={output} />
-    }
-
-    // For remaining text-based systems, ∅ means no representation
-    if (output === '∅') {
-      return <span className="tile-no-rep">No representation</span>
     }
 
     if (system.id === 'egyptian' && !fontReady) {
