@@ -61,24 +61,42 @@ Complexity estimates: S = simple (< 1 hour), M = moderate (1-3 hours), L = compl
 ---
 
 ## Phase 2 — UI
-*All components implemented on branch `feature/phase2-ui`. Pending manual smoke test to close out.*
+*Smoke test done 2026-04-13. Language-dependent ranges in progress on `feature/phase2-ui`.*
 
 - [x] `App.tsx` — root component, state management — **S**
 - [x] `InputPanel.tsx` — text input with range validation — **S**
 - [x] `PhotoPanel.tsx` — file upload, system selector, loading state — **M**
 - [x] `OutputGrid.tsx` — fan-out, renders 7 tiles — **S**
-- [x] `NumeralTile.tsx` — unicode/svg/text render modes, "∅" handling, font loading gate — **M**
+- [x] `NumeralTile.tsx` — unicode/svg/text render modes, "∅" handling, font loading gate, click-to-expand modal — **M**
 - [x] `VisionOverride.tsx` — manual entry on Vision failure — **S**
 - [x] `main.css` — layout, tile styling, font-face declarations, loading states — **M**
 - [x] Wire up CONVERTERS registry to OutputGrid — **S**
 - [x] Wire up Vision flow: PhotoPanel → vision-client → App state → OutputGrid — **M**
-- [ ] Verify font loading behavior for Egyptian Hieroglyphics — **S**
-- [ ] Manual smoke test: type 1, 9, 42, 100, 1000, 3999 — verify all 7 tiles render — **S**
-- [ ] Manual smoke test: type 0 — verify "No representation" tiles (and Mayan shell) — **S**
+- [x] Verify font loading behavior for Egyptian Hieroglyphics — **S**
+- [x] Manual smoke test: type 1, 9, 42, 100, 1000, 3999 — verify all 7 tiles render — **S**
+- [x] Manual smoke test: type 0 — verify "No representation" tiles (and Mayan shell) — **S**
+- [x] Fix Mayan/Babylonian SVG colors (were invisible on dark background) — **S**
+- [x] Fix Babylonian unit wedge shape (now points downward, matching cuneiform) — **S**
+- [x] Add click-to-expand modal to NumeralTile (3× scale, Esc to close) — **S**
 
-**Definition of done:** `npm run dev` shows a working UI. All 7 systems display correctly for the smoke test values. Photo flow shows loading state, success state, and error+override state.
+**Language-dependent ranges (from smoke test feedback — in progress):**
+- [x] Add `maxValue` to Converter interface + registry — Task 1 ✅
+- [x] Lift Attic Greek range to 9,999 — Task 2 ✅
+- [ ] Lift Babylonian, Mayan, Chinese Rod to 999,999 — Task 3
+- [ ] Egyptian converter: add 10k/100k/1M symbols — Task 4
+- [ ] Ionian Greek: extend THOUSANDS to ͵θ — Task 5
+- [ ] InputPanel: raise cap to 9,999,999 — Task 6
+- [ ] NumeralTile: out-of-range state + modal range display — Task 7
+- [ ] RangeModal component (ⓘ button) — Tasks 8–9
+- [ ] CSS: Egyptian font 28px, sidebar header, range table — Task 10
+- [ ] Final smoke test — Task 11
 
-**Implementation note:** ∅ sentinel check moved before SVG dispatch in NumeralTile — Babylonian zero correctly shows "No representation" (not an SVG ∅). Fix committed on `feature/phase2-ui`.
+**Definition of done:** `npm run dev` shows working UI. All 7 systems display within their natural ranges. Out-of-range tiles show "out of range". ⓘ button shows all system ranges. 236+ tests passing.
+
+**Implementation notes:**
+- ∅ sentinel check moved before SVG dispatch in NumeralTile — Babylonian zero correctly shows "No representation"
+- `maxValue` field added to Converter interface; each system declares its own ceiling
+- SVG renderers (MayanSvg, BabylonianSvg) accept optional `scale` prop with viewBox for modal scaling
 
 ---
 

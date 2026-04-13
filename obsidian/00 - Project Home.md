@@ -1,7 +1,7 @@
 # Numeral Translator — Project Home
 
-## Status: Phase 2 Implementation Complete — Smoke Test Pending
-**Last updated:** 2026-04-12
+## Status: Phase 2 Smoke Test Done — Language-Dependent Ranges In Progress
+**Last updated:** 2026-04-13
 
 ---
 
@@ -29,12 +29,31 @@
 `https://github.com/EricTalanoa/numeral_translator.git`
 
 ## Current Blockers
-- None — resume next session with manual smoke test (`npm run dev` from `.worktrees/phase2-ui`)
+- None — resume next session with Task 3 of language-dependent ranges plan
+  (`docs/superpowers/plans/2026-04-13-language-dependent-ranges.md`)
+  Working in `.worktrees/phase2-ui`, branch `feature/phase2-ui`, 236/236 tests passing
 
 ---
 
 ## Session Log
 *(Newest at top — append only)*
+
+### 2026-04-13 — Phase 2 smoke test done; language-dependent ranges started
+- Manual smoke test run on `feature/phase2-ui` at `http://localhost:5174`
+- **Fixes from smoke test feedback:**
+  - Mayan SVG color changed to `#7ecf7e` (was invisible dark green on dark background)
+  - Babylonian SVG color changed to `#c8a97d` (was invisible dark brown)
+  - Babylonian unit wedge shape fixed: now points downward (▽) matching cuneiform nail in clay
+  - Click-to-expand feature added to NumeralTile: click any populated tile → modal at 3× scale; SVG components now accept `scale` prop with `viewBox` for clean scaling; Esc or click-outside to close
+  - Photo mode confirmed working: VisionOverride appears correctly when no API key
+- **Language-dependent ranges feature:**
+  - Input range was universal 3,999 → now system-dependent (Roman 3,999 · Attic/Ionian 9,999 · Babylonian/Mayan/Chinese Rod 999,999 · Egyptian 9,999,999)
+  - Spec: `docs/superpowers/specs/2026-04-13-language-dependent-ranges-design.md`
+  - Plan: `docs/superpowers/plans/2026-04-13-language-dependent-ranges.md`
+  - ✅ Task 1 done: `maxValue` added to Converter interface + registry (commit e92a293)
+  - ✅ Task 2 done: Attic Greek range lifted to 9,999 (commit f3d52fc, 236 tests)
+  - ⬜ Tasks 3–11 pending (Babylonian/Mayan/ChineseRod, Egyptian symbols, Ionian, InputPanel, NumeralTile, RangeModal, App, CSS, smoke test)
+- **Next session:** Resume language-dependent ranges at Task 3
 
 ### 2026-04-12 — Phase 2 implementation complete (smoke test pending)
 - Brainstormed + designed Phase 2 UI: dark/scholarly style, sidebar layout, tabs, minimal App state
