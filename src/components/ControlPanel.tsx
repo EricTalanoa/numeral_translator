@@ -1,19 +1,9 @@
 import { useState } from 'react'
 import { InputPanel } from './InputPanel'
+import { PhotoPanel } from './PhotoPanel'
 
 interface ControlPanelProps {
   onResult: (n: number) => void
-}
-
-// Placeholder until PhotoPanel is implemented in Task 8
-function PhotoPanelPlaceholder() {
-  return (
-    <div className="photo-panel">
-      <p style={{ color: 'var(--text-muted)', fontSize: '12px' }}>
-        Photo mode coming soon…
-      </p>
-    </div>
-  )
 }
 
 export function ControlPanel({ onResult }: ControlPanelProps) {
@@ -37,7 +27,7 @@ export function ControlPanel({ onResult }: ControlPanelProps) {
       </div>
       {mode === 'type'
         ? <InputPanel onResult={onResult} />
-        : <PhotoPanelPlaceholder />
+        : <PhotoPanel onResult={onResult} />
       }
     </div>
   )
