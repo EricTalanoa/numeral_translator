@@ -28,3 +28,6 @@ npm-debug.log*
 
 # brainstorming mockups
 .superpowers/
+
+# git worktrees
+.worktrees/
