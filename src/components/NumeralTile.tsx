@@ -17,18 +17,19 @@ export function NumeralTile({ system, value }: NumeralTileProps) {
       setFontReady(true)
       return
     }
-    document.fonts.load('1em NotoSansEgyptianHieroglyphs').then(() => {
-      setFontReady(true)
-    })
+    document.fonts.load('1em NotoSansEgyptianHieroglyphs')
+      .then(() => setFontReady(true))
+      .catch(() => setFontReady(true)) // degrade gracefully — fallback font renders
   }, [system.id])
 
-  function renderContent() {
+  function renderContent(): JSX.Element {
     if (value === null) {
       return <span className="tile-placeholder">—</span>
     }
 
     const output = system.fromArabic(value)
 
+    // SVG renderers handle their own zero/∅ sentinel internally
     if (system.id === 'mayan') {
       return <MayanSvg encoded={output} />
     }
@@ -37,6 +38,7 @@ export function NumeralTile({ system, value }: NumeralTileProps) {
       return <BabylonianSvg encoded={output} />
     }
 
+    // For remaining text-based systems, ∅ means no representation
     if (output === '∅') {
       return <span className="tile-no-rep">No representation</span>
     }
