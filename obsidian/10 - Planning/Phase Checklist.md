@@ -61,22 +61,24 @@ Complexity estimates: S = simple (< 1 hour), M = moderate (1-3 hours), L = compl
 ---
 
 ## Phase 2 — UI
-*Spawn after all Phase 1 agents confirm done.*
+*All components implemented on branch `feature/phase2-ui`. Pending manual smoke test to close out.*
 
-- [ ] `App.tsx` — root component, state management — **S**
-- [ ] `InputPanel.tsx` — text input with range validation — **S**
-- [ ] `PhotoPanel.tsx` — file upload, system selector, loading state — **M**
-- [ ] `OutputGrid.tsx` — fan-out, renders 7 tiles — **S**
-- [ ] `NumeralTile.tsx` — unicode/svg/text render modes, "∅" handling, font loading gate — **M**
-- [ ] `VisionOverride.tsx` — manual entry on Vision failure — **S**
-- [ ] `main.css` — layout, tile styling, font-face declarations, loading states — **M**
-- [ ] Wire up CONVERTERS registry to OutputGrid — **S**
-- [ ] Wire up Vision flow: PhotoPanel → vision-client → App state → OutputGrid — **M**
+- [x] `App.tsx` — root component, state management — **S**
+- [x] `InputPanel.tsx` — text input with range validation — **S**
+- [x] `PhotoPanel.tsx` — file upload, system selector, loading state — **M**
+- [x] `OutputGrid.tsx` — fan-out, renders 7 tiles — **S**
+- [x] `NumeralTile.tsx` — unicode/svg/text render modes, "∅" handling, font loading gate — **M**
+- [x] `VisionOverride.tsx` — manual entry on Vision failure — **S**
+- [x] `main.css` — layout, tile styling, font-face declarations, loading states — **M**
+- [x] Wire up CONVERTERS registry to OutputGrid — **S**
+- [x] Wire up Vision flow: PhotoPanel → vision-client → App state → OutputGrid — **M**
 - [ ] Verify font loading behavior for Egyptian Hieroglyphics — **S**
 - [ ] Manual smoke test: type 1, 9, 42, 100, 1000, 3999 — verify all 7 tiles render — **S**
 - [ ] Manual smoke test: type 0 — verify "No representation" tiles (and Mayan shell) — **S**
 
 **Definition of done:** `npm run dev` shows a working UI. All 7 systems display correctly for the smoke test values. Photo flow shows loading state, success state, and error+override state.
+
+**Implementation note:** ∅ sentinel check moved before SVG dispatch in NumeralTile — Babylonian zero correctly shows "No representation" (not an SVG ∅). Fix committed on `feature/phase2-ui`.
 
 ---
 
