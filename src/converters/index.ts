@@ -9,16 +9,17 @@ import * as chineseRod from './chinese-rod'
 export interface Converter {
   id: string
   label: string
+  maxValue: number
   toArabic: (input: string) => number
   fromArabic: (n: number) => string
 }
 
 export const CONVERTERS: Converter[] = [
-  { id: 'egyptian',   label: 'Egyptian Hieroglyphic', ...egyptian },
-  { id: 'ionian',     label: 'Ionian Greek',          ...ionian },
-  { id: 'attic',      label: 'Attic Greek',           ...attic },
-  { id: 'babylonian', label: 'Babylonian',            ...babylonian },
-  { id: 'roman',      label: 'Roman',                 ...roman },
-  { id: 'mayan',      label: 'Mayan',                 ...mayan },
-  { id: 'chineseRod', label: 'Chinese Rod',           ...chineseRod },
+  { id: 'egyptian',   label: 'Egyptian Hieroglyphic', maxValue: 9_999_999, ...egyptian },
+  { id: 'ionian',     label: 'Ionian Greek',          maxValue: 9_999,     ...ionian },
+  { id: 'attic',      label: 'Attic Greek',           maxValue: 9_999,     ...attic },
+  { id: 'babylonian', label: 'Babylonian',            maxValue: 999_999,   ...babylonian },
+  { id: 'roman',      label: 'Roman',                 maxValue: 3_999,     ...roman },
+  { id: 'mayan',      label: 'Mayan',                 maxValue: 999_999,   ...mayan },
+  { id: 'chineseRod', label: 'Chinese Rod',           maxValue: 999_999,   ...chineseRod },
 ]
