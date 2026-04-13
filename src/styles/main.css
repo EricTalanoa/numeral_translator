@@ -27,6 +27,7 @@ body {
   src: url('/fonts/NotoSansEgyptianHieroglyphs-Regular.ttf') format('truetype');
   font-weight: normal;
   font-style: normal;
+  font-display: block;
 }
 
 /* 4. Page layout */
@@ -220,7 +221,6 @@ body {
   letter-spacing: 1.5px;
   color: var(--text-muted);
   text-transform: uppercase;
-  font-variant: small-caps;
 }
 
 .tile-content {
