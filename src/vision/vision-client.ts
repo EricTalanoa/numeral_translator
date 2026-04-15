@@ -55,7 +55,7 @@ function parseResponse(rawText: string): { value: number | null; confidence: 'hi
   const match = trimmed.match(/^-?\d+$/)
   if (match) {
     const n = parseInt(match[0], 10)
-    if (n >= 0 && n <= 3999) {
+    if (n >= 0 && n <= 9_999_999) {
       return { value: n, confidence: 'high' }
     }
   }
@@ -82,6 +82,7 @@ export async function recognizeNumeral(
         'Content-Type': 'application/json',
         'x-api-key': apiKey,
         'anthropic-version': '2023-06-01',
+        'anthropic-dangerous-direct-browser-access': 'true',
       },
       body: JSON.stringify({
         model: MODEL,
