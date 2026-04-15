@@ -8,7 +8,7 @@ const HOBBLE = '\u{13386}' // 10
 const STROKE = '\u{133FA}' // 1
 const EMPTY  = '\u2205'    // ∅
 const FINGER  = '\u{130AD}' // 10,000  — D50
-const TADPOLE = '\u{130F2}' // 100,000 — I8
+const TADPOLE = '\u{13190}' // 100,000 — I008 (tadpole)
 const HEH     = '\u{13068}' // 1,000,000 — C11
 
 describe('Egyptian — fromArabic', () => {

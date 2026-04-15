@@ -1,9 +1,9 @@
-// SMP codepoints: U+13068 (Heh=1M), U+130F2 (tadpole=100k), U+130AD (finger=10k),
+// SMP codepoints: U+13068 (Heh=1M), U+13190 (tadpole=100k), U+130AD (finger=10k),
 // U+131BC (lotus=1k), U+13362 (rope=100), U+13386 (hobble=10), U+133FA (stroke=1)
 const SYMBOLS: [number, string][] = [
-  [1_000_000, '\u{13068}'],  // C11 — Heh god
-  [100_000,   '\u{130F2}'],  // I8  — tadpole
-  [10_000,    '\u{130AD}'],  // D50 — finger
+  [1_000_000, '\u{13068}'],  // C11  — Heh god
+  [100_000,   '\u{13190}'],  // I008 — tadpole
+  [10_000,    '\u{130AD}'],  // D50  — finger
   [1_000,     '\u{131BC}'],  // M12 — lotus
   [100,        '\u{13362}'],  // V1  — coiled rope
   [10,         '\u{13386}'],  // V20 — hobble
@@ -12,7 +12,7 @@ const SYMBOLS: [number, string][] = [
 
 const GLYPH_VALUES = new Map<string, number>([
   ['\u{13068}', 1_000_000],
-  ['\u{130F2}',   100_000],
+  ['\u{13190}',   100_000],
   ['\u{130AD}',    10_000],
   ['\u{131BC}',     1_000],
   ['\u{13362}',       100],
