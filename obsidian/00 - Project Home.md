@@ -1,7 +1,7 @@
 # Numeral Translator — Project Home
 
-## Status: Phase 2 Smoke Test Done — Language-Dependent Ranges In Progress
-**Last updated:** 2026-04-13
+## Status: Phase 3 In Progress — Chinese Traditional + Glagolitic converters being added
+**Last updated:** 2026-04-14
 
 ---
 
@@ -15,7 +15,7 @@
 
 ### Numeral Systems
 - [[Egyptian Hieroglyphic]] · [[Ionian Greek]] · [[Attic Greek]] · [[Babylonian]]
-- [[Roman]] · [[Mayan]] · [[Chinese Rod]]
+- [[Roman]] · [[Mayan]] · [[Chinese Rod]] · [[Chinese Traditional]] · [[Glagolitic]]
 
 ### Dev Notes
 - [[Converter Interface]] — locked toArabic/fromArabic contract
@@ -29,14 +29,46 @@
 `https://github.com/EricTalanoa/numeral_translator.git`
 
 ## Current Blockers
-- None — resume next session with Task 3 of language-dependent ranges plan
-  (`docs/superpowers/plans/2026-04-13-language-dependent-ranges.md`)
-  Working in `.worktrees/phase2-ui`, branch `feature/phase2-ui`, 236/236 tests passing
+- None. Working in `.worktrees/phase2-ui`, branch `feature/phase2-ui`.
+  Chinese Traditional converter done (312/312 tests). Glagolitic Tasks 3–5 pending (paused for doc update).
 
 ---
 
 ## Session Log
 *(Newest at top — append only)*
+
+### 2026-04-14 — Phase 3 started: two new numeral systems, bug fixes
+- **Bug fixes (phase 2.5):**
+  - `vision-client.ts` `parseResponse` range cap lifted from 3,999 → 9,999,999 (photo mode was silently rejecting larger values)
+  - Added `anthropic-dangerous-direct-browser-access: true` header to Anthropic fetch (required for direct browser API calls)
+  - Egyptian "goat" clarified: U+130F2 (I8) IS the tadpole — correct codepoint, just an unfamiliar glyph shape
+- **Planning — new systems:**
+  - Spec written: `docs/superpowers/specs/2026-04-14-new-systems-chinese-glagolitic-design.md`
+  - Plan written: `docs/superpowers/plans/2026-04-14-chinese-traditional-and-glagolitic.md`
+  - Chinese Traditional: literary multiplicative notation, maxValue 9,999,999, 45 tests
+  - Glagolitic: alphabetic additive (U+2C30–U+2C53), maxValue 9,999, 24 tests
+  - Per-language history pages deferred to Phase 5
+- **Chinese Traditional converter: ✅ complete**
+  - `src/converters/chinese-traditional.ts` — convertSubGroup (needZero flag), fromArabic (萬 grouping + 零 bridge + leading-一 strip), toArabic
+  - 45/45 tests passing. Spec + code quality reviews both approved.
+  - 312/312 total tests (267 pre-existing + 45 new)
+- **Glagolitic converter: ⬜ in progress** (Tasks 3–5 pending)
+- **Next session:** Resume at Task 3 (Glagolitic test file) of `docs/superpowers/plans/2026-04-14-chinese-traditional-and-glagolitic.md`
+
+### 2026-04-14 — Language-dependent ranges complete; Phase 2 done
+- Completed Tasks 3–11 of `docs/superpowers/plans/2026-04-13-language-dependent-ranges.md`
+- **Task 3:** Babylonian, Mayan, Chinese Rod range guards lifted to 999,999
+- **Task 4:** Egyptian extended to 9,999,999 — added finger (D50, `\u{130AD}`), tadpole (I8, `\u{130F2}`), Heh god (C11, `\u{13068}`) symbols
+- **Task 5:** Ionian Greek THOUSANDS array extended to ͵θ (9,000); range → 9,999
+- **Task 6:** InputPanel cap raised to 9,999,999; label updated; error message updated
+- **Task 7:** NumeralTile adds `outOfRange` preflight — tiles show "out of range" text; expand modal shows valid range for that system
+- **Task 8:** `RangeModal.tsx` created — table of all 7 systems and their ranges, driven by CONVERTERS
+- **Task 9:** App.tsx wired — `showRanges` state, ⓘ button in sidebar header row, RangeModal rendered
+- **Task 10:** CSS — Egyptian font 24→28px; `.app-title` replaced with `.app-title-row` flex layout + `.range-info-btn`; range table and out-of-range modal styles added
+- **Task 11:** Smoke test passed — out-of-range tiles, click-to-expand modal with range info, ⓘ range panel all verified
+- 267/267 tests passing. TypeScript clean. 10 commits on `feature/phase2-ui`.
+- User noted some additional changes to make — deferred to Phase 2.5 or Phase 3.
+- **Next session:** Start Phase 3 QA (or Phase 2.5 fixes if user defines them)
 
 ### 2026-04-13 — Phase 2 smoke test done; language-dependent ranges started
 - Manual smoke test run on `feature/phase2-ui` at `http://localhost:5174`

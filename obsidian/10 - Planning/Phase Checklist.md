@@ -60,8 +60,8 @@ Complexity estimates: S = simple (< 1 hour), M = moderate (1-3 hours), L = compl
 
 ---
 
-## Phase 2 — UI
-*Smoke test done 2026-04-13. Language-dependent ranges in progress on `feature/phase2-ui`.*
+## Phase 2 — UI ✅ COMPLETE
+*Smoke test done 2026-04-13. Language-dependent ranges complete 2026-04-14.*
 
 - [x] `App.tsx` — root component, state management — **S**
 - [x] `InputPanel.tsx` — text input with range validation — **S**
@@ -82,16 +82,16 @@ Complexity estimates: S = simple (< 1 hour), M = moderate (1-3 hours), L = compl
 **Language-dependent ranges (from smoke test feedback — in progress):**
 - [x] Add `maxValue` to Converter interface + registry — Task 1 ✅
 - [x] Lift Attic Greek range to 9,999 — Task 2 ✅
-- [ ] Lift Babylonian, Mayan, Chinese Rod to 999,999 — Task 3
-- [ ] Egyptian converter: add 10k/100k/1M symbols — Task 4
-- [ ] Ionian Greek: extend THOUSANDS to ͵θ — Task 5
-- [ ] InputPanel: raise cap to 9,999,999 — Task 6
-- [ ] NumeralTile: out-of-range state + modal range display — Task 7
-- [ ] RangeModal component (ⓘ button) — Tasks 8–9
-- [ ] CSS: Egyptian font 28px, sidebar header, range table — Task 10
-- [ ] Final smoke test — Task 11
+- [x] Lift Babylonian, Mayan, Chinese Rod to 999,999 — Task 3 ✅
+- [x] Egyptian converter: add 10k/100k/1M symbols — Task 4 ✅
+- [x] Ionian Greek: extend THOUSANDS to ͵θ — Task 5 ✅
+- [x] InputPanel: raise cap to 9,999,999 — Task 6 ✅
+- [x] NumeralTile: out-of-range state + modal range display — Task 7 ✅
+- [x] RangeModal component (ⓘ button) — Tasks 8–9 ✅
+- [x] CSS: Egyptian font 28px, sidebar header, range table — Task 10 ✅
+- [x] Final smoke test — Task 11 ✅
 
-**Definition of done:** `npm run dev` shows working UI. All 7 systems display within their natural ranges. Out-of-range tiles show "out of range". ⓘ button shows all system ranges. 236+ tests passing.
+**Definition of done:** ✅ `npm run dev` shows working UI. All 7 systems display within their natural ranges. Out-of-range tiles show "out of range". ⓘ button shows all system ranges. 267/267 tests passing.
 
 **Implementation notes:**
 - ∅ sentinel check moved before SVG dispatch in NumeralTile — Babylonian zero correctly shows "No representation"
@@ -100,24 +100,38 @@ Complexity estimates: S = simple (< 1 hour), M = moderate (1-3 hours), L = compl
 
 ---
 
-## Phase 3 — QA & Integration
-*Spawn QA agent after Phase 2.*
+## Phase 3 — QA & Integration + New Systems
+*In progress 2026-04-14*
 
+**Bug fixes (Phase 2.5, complete):**
+- [x] Fix `parseResponse` range cap in `vision-client.ts` (3,999 → 9,999,999)
+- [x] Add `anthropic-dangerous-direct-browser-access` header to Anthropic API fetch
+
+**New numeral systems:**
+- [x] Design spec: `docs/superpowers/specs/2026-04-14-new-systems-chinese-glagolitic-design.md`
+- [x] Implementation plan: `docs/superpowers/plans/2026-04-14-chinese-traditional-and-glagolitic.md`
+- [x] Chinese Traditional converter + 45 tests — `src/converters/chinese-traditional.ts` ✅
+- [ ] Glagolitic test file (TDD red) — Task 3
+- [ ] Glagolitic converter + 24 tests — Task 4
+- [ ] Register both in CONVERTERS, add vision hints + CSS — Task 5
+
+**QA tasks:**
 - [ ] Cross-system integration test: n in [1, 10, 42, 100, 999, 1000, 3999] all round-trip — **M**
-- [ ] Zero edge case: `fromArabic(0)` returns `"∅"` for 6 systems, shell string for Mayan — **S**
-- [ ] Max value edge case: `fromArabic(3999)` produces valid output for all systems — **S**
-- [ ] Out-of-range error: `fromArabic(4000)` throws for all systems — **S**
+- [ ] Zero edge case: `fromArabic(0)` returns `"∅"` for 8 systems, shell string for Mayan — **S**
+- [ ] Max value edge case: each system valid at its ceiling — **S**
+- [ ] Out-of-range error: each system throws at its own ceiling — **S**
 - [ ] Fraction error: `toArabic("3.5")` throws for all systems — **S**
 - [ ] Manual Vision test checklist (append to [[Bugs and Fixes]]) — **M**
 - [ ] Code review: verify no converter imports from another, no converter touches DOM — **S**
 - [ ] Verify `.env.local` is in `.gitignore` and not tracked by git — **S**
 
-**Definition of done:** All automated tests pass. Manual checklist complete. No converter cross-imports. Security verified.
+**Definition of done:** 336/336 tests passing. Both new tiles visible and working. All QA tasks checked. No converter cross-imports. Security verified.
 
 ---
 
 ## Phase 4 — Quiz Mode (Stretch Goal)
 *Begin only after Phase 3 is fully signed off.*
+*(quiz now covers 9 systems)*
 
 **Concept:** The app displays a numeral in one system and asks the user to type the Arabic value. Immediate feedback (correct / incorrect + explanation).
 

@@ -1,8 +1,11 @@
 # Numeral Translator — Claude Code Session Guide
 
 ## Current Status
-**Phase 1 complete.** All 7 converters + 2 SVG renderers + vision client implemented.
-225/225 tests passing. TypeScript clean. **Next: Phase 2** — UI layer.
+**Phase 3 in progress.** 312/312 tests passing. TypeScript clean.
+Working in `.worktrees/phase2-ui`, branch `feature/phase2-ui`.
+Chinese Traditional converter ✅ complete. **Resume at Task 3 (Glagolitic test file)** of
+`docs/superpowers/plans/2026-04-14-chinese-traditional-and-glagolitic.md`
+Use subagent-driven-development skill to continue.
 
 ## What this project is
 A React + Vite + TypeScript web app that translates Arabic integers (1–3,999) into
@@ -19,7 +22,7 @@ Open `obsidian/` as a vault in Obsidian, or read these files in order:
 5. `obsidian/30 - Dev Notes/Converter Interface.md` — locked toArabic/fromArabic contract
 
 ## Key decisions (locked)
-- Input range: 1–3,999 (Roman numeral ceiling)
+- Input range: system-dependent (Roman 3,999 · Attic/Ionian 9,999 · Babylonian/Mayan/ChineseRod 999,999 · Egyptian 9,999,999)
 - Zero: "No representation" (∅ sentinel) for all systems except Mayan (shell glyph)
 - Fractions: out of scope for v1
 - Vision model: `claude-sonnet-4-6`
@@ -31,9 +34,10 @@ Open `obsidian/` as a vault in Obsidian, or read these files in order:
 ## Phase summary
 - **Phase 0** ✅ Scaffold, stubs, registry, git setup
 - **Phase 1** ✅ Converters (×7) + Renderer + Vision — 225 tests passing
-- **Phase 2** ⬜ UI (blocked until Phase 1 complete)
-- **Phase 3** ⬜ QA + integration tests
+- **Phase 2** ✅ UI — complete; 267 tests; language-dependent ranges shipped
+- **Phase 3** 🔄 QA + new systems (Chinese Traditional ✅, Glagolitic ⬜, QA tasks ⬜)
 - **Phase 4** ⬜ Quiz mode (stretch goal)
+- **Phase 5** ⬜ Per-language history pages with images (stretch goal)
 
 ## Plans live here
 `docs/superpowers/plans/` — implementation plans for each phase
