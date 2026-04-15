@@ -9,15 +9,16 @@ const CELL_GAP    = 6
 
 interface MayanSvgProps {
   encoded: string
+  scale?: number
 }
 
 function renderShell(offsetY: number): JSX.Element {
   return (
     <>
       <ellipse cx={30} cy={offsetY + 25} rx={20} ry={12}
-        fill="none" stroke="#2d4a1e" strokeWidth={2} />
+        fill="none" stroke="#7ecf7e" strokeWidth={2} />
       <ellipse cx={30} cy={offsetY + 21} rx={12} ry={6}
-        fill="none" stroke="#2d4a1e" strokeWidth={1.5} />
+        fill="none" stroke="#7ecf7e" strokeWidth={1.5} />
     </>
   )
 }
@@ -34,7 +35,7 @@ function renderDigitCell(digit: number, cellY: number, key: number): JSX.Element
     const barY = cellY + CELL_HEIGHT - BAR_HEIGHT - 6 - b * (BAR_HEIGHT + 3)
     return (
       <rect key={`bar${b}`} x={5} y={barY} width={BAR_WIDTH} height={BAR_HEIGHT}
-        rx={2} fill="#2d4a1e" />
+        rx={2} fill="#7ecf7e" />
     )
   })
 
@@ -52,7 +53,7 @@ function renderDigitCell(digit: number, cellY: number, key: number): JSX.Element
         const startX = (CELL_WIDTH - totalW) / 2 + DOT_RADIUS
         return (
           <circle key={`dot${d}`} cx={startX + d * (DOT_RADIUS * 2 + 4)}
-            cy={dotsY} r={DOT_RADIUS} fill="#2d4a1e" />
+            cy={dotsY} r={DOT_RADIUS} fill="#7ecf7e" />
         )
       })
     : []
@@ -60,10 +61,14 @@ function renderDigitCell(digit: number, cellY: number, key: number): JSX.Element
   return <g key={key}>{bars}{dots}</g>
 }
 
-export function MayanSvg({ encoded }: MayanSvgProps): JSX.Element {
+export function MayanSvg({ encoded, scale = 1 }: MayanSvgProps): JSX.Element {
   if (encoded === 'shell') {
     return (
-      <svg width={CELL_WIDTH} height={CELL_HEIGHT} data-testid="mayan-svg">
+      <svg
+        width={CELL_WIDTH * scale} height={CELL_HEIGHT * scale}
+        viewBox={`0 0 ${CELL_WIDTH} ${CELL_HEIGHT}`}
+        data-testid="mayan-svg"
+      >
         {renderShell(0)}
       </svg>
     )
@@ -73,7 +78,11 @@ export function MayanSvg({ encoded }: MayanSvgProps): JSX.Element {
   const totalHeight = digits.length * CELL_HEIGHT + Math.max(0, digits.length - 1) * CELL_GAP
 
   return (
-    <svg width={CELL_WIDTH} height={totalHeight} data-testid="mayan-svg">
+    <svg
+      width={CELL_WIDTH * scale} height={totalHeight * scale}
+      viewBox={`0 0 ${CELL_WIDTH} ${totalHeight}`}
+      data-testid="mayan-svg"
+    >
       {digits.map((digit, i) =>
         renderDigitCell(digit, i * (CELL_HEIGHT + CELL_GAP), i)
       )}
