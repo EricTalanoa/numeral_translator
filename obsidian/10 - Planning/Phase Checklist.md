@@ -106,26 +106,27 @@ Complexity estimates: S = simple (< 1 hour), M = moderate (1-3 hours), L = compl
 **Bug fixes (Phase 2.5, complete):**
 - [x] Fix `parseResponse` range cap in `vision-client.ts` (3,999 → 9,999,999)
 - [x] Add `anthropic-dangerous-direct-browser-access` header to Anthropic API fetch
+- [x] Fix Egyptian 100k glyph: U+130F2 (E028, goat) → U+13190 (I008, tadpole) — commit `0db4a78`
 
 **New numeral systems:**
 - [x] Design spec: `docs/superpowers/specs/2026-04-14-new-systems-chinese-glagolitic-design.md`
 - [x] Implementation plan: `docs/superpowers/plans/2026-04-14-chinese-traditional-and-glagolitic.md`
 - [x] Chinese Traditional converter + 45 tests — `src/converters/chinese-traditional.ts` ✅
-- [ ] Glagolitic test file (TDD red) — Task 3
-- [ ] Glagolitic converter + 24 tests — Task 4
-- [ ] Register both in CONVERTERS, add vision hints + CSS — Task 5
+- [x] Glagolitic test file (TDD red) — Task 3 ✅
+- [x] Glagolitic converter + 24 tests — Task 4 ✅
+- [x] Register both in CONVERTERS, add vision hints + CSS — Task 5 ✅
 
 **QA tasks:**
-- [ ] Cross-system integration test: n in [1, 10, 42, 100, 999, 1000, 3999] all round-trip — **M**
-- [ ] Zero edge case: `fromArabic(0)` returns `"∅"` for 8 systems, shell string for Mayan — **S**
-- [ ] Max value edge case: each system valid at its ceiling — **S**
-- [ ] Out-of-range error: each system throws at its own ceiling — **S**
-- [ ] Fraction error: `toArabic("3.5")` throws for all systems — **S**
-- [ ] Manual Vision test checklist (append to [[Bugs and Fixes]]) — **M**
-- [ ] Code review: verify no converter imports from another, no converter touches DOM — **S**
-- [ ] Verify `.env.local` is in `.gitignore` and not tracked by git — **S**
+- [x] Cross-system integration test: n in [1, 10, 42, 100, 999, 1000, 3999] all round-trip — **M** ✅ `tests/integration/round-trips.test.ts` (63 tests)
+- [x] Zero edge case: `fromArabic(0)` returns `"∅"` for 8 systems, shell string for Mayan — **S** ✅ `tests/integration/edge-cases.test.ts`
+- [x] Max value edge case: each system valid at its ceiling — **S** ✅
+- [x] Out-of-range error: each system throws at its own ceiling — **S** ✅
+- [x] Fraction error: `toArabic("3.5")` throws for all systems — **S** ✅
+- [x] Manual Vision test checklist (append to [[Bugs and Fixes]]) — **M** ✅ Updated for 9 systems
+- [x] Code review: verify no converter imports from another, no converter touches DOM — **S** ✅ Clean
+- [x] Verify `.env.local` is in `.gitignore` and not tracked by git — **S** ✅
 
-**Definition of done:** 336/336 tests passing. Both new tiles visible and working. All QA tasks checked. No converter cross-imports. Security verified.
+**Definition of done:** 435/435 tests passing ✅. Both new tiles visible and working ✅ (smoke test passed 2026-04-15). Phase 2.5 bugs all fixed ✅. QA tasks all complete ✅.
 
 ---
 

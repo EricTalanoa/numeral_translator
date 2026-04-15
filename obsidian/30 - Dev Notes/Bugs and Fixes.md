@@ -25,6 +25,8 @@ Running log of issues found and resolved. Append new entries at the top.
 - [ ] Attic Greek: photo of "ΧΔΙ" → correctly returns 1011
 - [ ] Babylonian: photo of wedge clusters → returns plausible value
 - [ ] Chinese Rod: photo of rod glyphs → returns plausible value
+- [ ] Chinese Traditional: photo of "四十二" → correctly returns 42
+- [ ] Glagolitic: photo of Glagolitic letters → returns plausible value
 
 ### Failure Path Tests
 - [ ] Blurry photo → app shows "Could not identify" message (not a crash)
@@ -35,14 +37,19 @@ Running log of issues found and resolved. Append new entries at the top.
 
 ### Override Tests
 - [ ] VisionOverride renders after failure
-- [ ] Typing "42" in override and submitting populates all 7 output tiles
-- [ ] Typing "0" in override shows "No representation" for 6 systems, shell for Mayan
+- [ ] Typing "42" in override and submitting populates all 9 output tiles
+- [ ] Typing "0" in override shows "No representation" for 8 systems, shell for Mayan
 - [ ] Typing "4000" in override shows validation error
 
 ---
 
 ## Resolved Issues
-*(Append here as issues are found and fixed)*
+
+### 2026-04-15 — Egyptian 100k glyph: wrong codepoint (E028 goat → I008 tadpole)
+**Symptom:** The 100,000 hieroglyph rendered as a goat-like animal.
+**Root cause:** U+130F2 is Gardiner E028 (a mammal), not I8 (tadpole). The previous session incorrectly assumed the "goat" appearance was just unfamiliar rendering of the tadpole.
+**Fix:** Changed U+130F2 → U+13190 (Gardiner I008, the tadpole) in `src/converters/egyptian.ts` and `tests/converters/egyptian.test.ts`. Commit `0db4a78`.
+**Lesson:** Egyptian SMP codepoints must be verified against the actual Unicode character names (e.g. via compart.com), not assumed from Gardiner sign numbers.
 
 ---
 

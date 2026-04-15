@@ -1,7 +1,7 @@
 # Numeral Translator — Project Home
 
-## Status: Phase 3 In Progress — Chinese Traditional + Glagolitic converters being added
-**Last updated:** 2026-04-14
+## Status: Phase 3 Complete — 435/435 tests passing; Phase 4 (Quiz Mode) next
+**Last updated:** 2026-04-15
 
 ---
 
@@ -30,18 +30,34 @@
 
 ## Current Blockers
 - None. Working in `.worktrees/phase2-ui`, branch `feature/phase2-ui`.
-  Chinese Traditional converter done (312/312 tests). Glagolitic Tasks 3–5 pending (paused for doc update).
+  Phase 3 complete. 435/435 tests passing. Next: Phase 4 Quiz Mode (stretch goal).
 
 ---
 
 ## Session Log
 *(Newest at top — append only)*
 
+### 2026-04-15 — Phase 3 QA complete: integration tests, edge cases, code review
+- **Integration tests added:** `tests/integration/round-trips.test.ts` (63 tests) — cross-system `toArabic(fromArabic(n))` for n in [1, 10, 42, 100, 999, 1000, 3999] across all 9 converters
+- **Edge-case tests added:** `tests/integration/edge-cases.test.ts` (36 tests) — zero (∅/shell), maxValue valid, maxValue+1 throws, `toArabic("3.5")` throws for all 9 systems
+- **Code review passed:** No converter imports from another; no converter touches DOM; `.env.local` in `.gitignore` and not tracked
+- **Vision test checklist updated:** Added Chinese Traditional and Glagolitic test cases; updated 7→9 tile counts in override tests
+- **435/435 tests passing. Phase 3 fully complete.**
+- **Next: Phase 4 Quiz Mode** (begin only after Phase 3 signed off — it is)
+
+### 2026-04-15 — Phase 2.5 complete: smoke test + Egyptian tadpole fix
+- **Smoke test passed:** Chinese Traditional and Glagolitic tiles (8+9) render correctly. All 9 systems display in expected ranges. ⓘ modal shows 9 rows.
+- **Egyptian tadpole bug (re-opened and fixed):**
+  - Previous session incorrectly concluded U+130F2 was the tadpole (I8). It is actually Gardiner E028, a mammal — hence the "goat."
+  - Correct codepoint: **U+13190** (Gardiner I008, tadpole). Fixed in `src/converters/egyptian.ts` and `tests/converters/egyptian.test.ts`. Commit `0db4a78`.
+  - 336/336 tests still pass after fix.
+- **Phase 2.5 now fully complete.** Next: Phase 3 QA tasks.
+
 ### 2026-04-14 — Phase 3 started: two new numeral systems, bug fixes
 - **Bug fixes (phase 2.5):**
   - `vision-client.ts` `parseResponse` range cap lifted from 3,999 → 9,999,999 (photo mode was silently rejecting larger values)
   - Added `anthropic-dangerous-direct-browser-access: true` header to Anthropic fetch (required for direct browser API calls)
-  - Egyptian "goat" clarified: U+130F2 (I8) IS the tadpole — correct codepoint, just an unfamiliar glyph shape
+  - Egyptian "goat": incorrectly concluded this was a rendering quirk — actual fix was in 2026-04-15 session (see above)
 - **Planning — new systems:**
   - Spec written: `docs/superpowers/specs/2026-04-14-new-systems-chinese-glagolitic-design.md`
   - Plan written: `docs/superpowers/plans/2026-04-14-chinese-traditional-and-glagolitic.md`
@@ -52,8 +68,14 @@
   - `src/converters/chinese-traditional.ts` — convertSubGroup (needZero flag), fromArabic (萬 grouping + 零 bridge + leading-一 strip), toArabic
   - 45/45 tests passing. Spec + code quality reviews both approved.
   - 312/312 total tests (267 pre-existing + 45 new)
-- **Glagolitic converter: ⬜ in progress** (Tasks 3–5 pending)
-- **Next session:** Resume at Task 3 (Glagolitic test file) of `docs/superpowers/plans/2026-04-14-chinese-traditional-and-glagolitic.md`
+- **Glagolitic converter: ✅ complete** — `src/converters/glagolitic.ts`, 24/24 tests, commit `90592bc`
+  - UNITS array bug caught by spec review: sequential U+2C30–U+2C38, test for 42 corrected to `'\u2C3C\u2C31'`
+- **Task 5 (registry + vision hints + CSS): ✅ complete** — commit `00d2427`
+  - `src/converters/index.ts` now has 9 entries; registry test updated to match
+  - `systemHint()` has `case 'Chinese Traditional':` and `case 'Glagolitic':`
+  - `.chineseTraditional { font-size: 20px }` and `.glagolitic { font-family: 'Segoe UI Historic'; font-size: 24px }`
+- **336/336 tests passing. TypeScript clean.**
+- **Next session:** Manual smoke test (Chinese Traditional + Glagolitic tiles), then Phase 3 QA tasks
 
 ### 2026-04-14 — Language-dependent ranges complete; Phase 2 done
 - Completed Tasks 3–11 of `docs/superpowers/plans/2026-04-13-language-dependent-ranges.md`
