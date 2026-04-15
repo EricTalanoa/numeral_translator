@@ -6,7 +6,7 @@ const V1 = '\u{1D360}'; const V2 = '\u{1D361}'; const V3 = '\u{1D362}'
 const V4 = '\u{1D363}'; const V9 = '\u{1D368}'
 
 // Horizontal rods (odd positions: tens=1, thousands=3, ...)
-const H1 = '\u{1D369}'; const H3 = '\u{1D36B}'; const H9 = '\u{1D371}'
+const H1 = '\u{1D369}'; const H3 = '\u{1D36B}'; const H4 = '\u{1D36C}'; const H9 = '\u{1D371}'
 
 // Zero placeholder and sentinel
 const ZERO = '\u3007'   // 〇 (zero digit within a number)
@@ -27,7 +27,8 @@ describe('Chinese Rod — fromArabic', () => {
   it('3999 (max) → horiz-3 + vert-9 + horiz-9 + vert-9', () =>
     expect(fromArabic(3999)).toBe(H3 + V9 + H9 + V9))
   it('throws on non-integer', () => expect(() => fromArabic(1.5)).toThrow('Input must be an integer'))
-  it('throws on 4000', () => expect(() => fromArabic(4000)).toThrow('Out of range: 4000'))
+  it('4000 → horiz-4 + 3 zeros', () => expect(fromArabic(4000)).toBe(H4 + ZERO + ZERO + ZERO))
+  it('throws on 1000000', () => expect(() => fromArabic(1000000)).toThrow('Out of range: 1000000'))
   it('throws on -1', () => expect(() => fromArabic(-1)).toThrow('Out of range: -1'))
 })
 
@@ -37,7 +38,7 @@ describe('Chinese Rod — toArabic', () => {
 })
 
 describe('Chinese Rod — round-trips', () => {
-  const cases = [1, 9, 10, 11, 99, 100, 101, 1000, 1234, 3999]
+  const cases = [1, 9, 10, 11, 99, 100, 101, 1000, 1234, 3999, 4000, 999999]
   for (const n of cases) {
     it(`round-trip ${n}`, () => expect(toArabic(fromArabic(n))).toBe(n))
   }

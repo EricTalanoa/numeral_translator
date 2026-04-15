@@ -13,7 +13,9 @@ describe('Babylonian — fromArabic', () => {
   it('3661 → "1|1|1"', () => expect(fromArabic(3661)).toBe('1|1|1'))
   it('3999 → "1|6|39"', () => expect(fromArabic(3999)).toBe('1|6|39'))
   it('throws on non-integer', () => expect(() => fromArabic(1.5)).toThrow('Input must be an integer'))
-  it('throws on 4000', () => expect(() => fromArabic(4000)).toThrow('Out of range: 4000'))
+  it('4000 → "1|6|40"', () => expect(fromArabic(4000)).toBe('1|6|40'))
+  it('999999 → "4|37|46|39"', () => expect(fromArabic(999999)).toBe('4|37|46|39'))
+  it('throws on 1000000', () => expect(() => fromArabic(1000000)).toThrow('Out of range: 1000000'))
   it('throws on -1', () => expect(() => fromArabic(-1)).toThrow('Out of range: -1'))
 })
 
@@ -33,7 +35,7 @@ describe('Babylonian — toArabic', () => {
 })
 
 describe('Babylonian — round-trips', () => {
-  const cases = [1, 59, 60, 61, 120, 3600, 3661, 3999]
+  const cases = [1, 59, 60, 61, 120, 3600, 3661, 3999, 4000, 999999]
   for (const n of cases) {
     it(`round-trip ${n}`, () => expect(toArabic(fromArabic(n))).toBe(n))
   }
