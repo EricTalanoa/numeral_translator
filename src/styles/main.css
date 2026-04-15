@@ -291,6 +291,16 @@ body {
   font-size: 24px;
 }
 
+.chineseTraditional {
+  font-family: var(--font-display);
+  font-size: 20px;
+}
+
+.glagolitic {
+  font-family: 'Segoe UI Historic', var(--font-display);
+  font-size: 24px;
+}
+
 /* 12. Expand modal */
 .tile-modal-overlay {
   position: fixed;

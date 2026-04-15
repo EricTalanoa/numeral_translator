@@ -26,6 +26,10 @@ function systemHint(systemName: string): string {
       return 'Mayan numerals use dots (each worth 1), horizontal bars (each worth 5), and a shell shape (= 0). Digits are stacked vertically, highest at top. The system is base-20 positional.'
     case 'Chinese Rod':
       return 'Chinese rod numerals alternate orientation: vertical rods for ones/hundreds/ten-thousands, horizontal rods for tens/thousands. Single rods are simple lines; 6\u20139 add a crossing rod.'
+    case 'Chinese Traditional':
+      return 'Classical Chinese numerals use characters: 一(1) 二(2) 三(3) 四(4) 五(5) 六(6) 七(7) 八(8) 九(9) 十(10) 百(100) 千(1000) 萬(10000). Numbers are written largest-to-smallest; 零 marks a zero gap between non-zero groups.'
+    case 'Glagolitic':
+      return 'Glagolitic numerals use Glagolitic script letters additively, largest to smallest. The first 9 letters equal 1\u20139, the next 9 equal 10\u201390, the next 9 equal 100\u2013900, and the next 9 equal 1000\u20139000.'
     default:
       return 'Identify the numeral value shown in the image.'
   }
