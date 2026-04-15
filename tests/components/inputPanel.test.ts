@@ -22,10 +22,18 @@ describe('parseInputValue', () => {
     expect(parseInputValue('3999')).toEqual({ value: 3999, error: null })
   })
 
-  it('returns error for value above 3999', () => {
-    const result = parseInputValue('4000')
+  it('returns valid value for 4000', () => {
+    expect(parseInputValue('4000')).toEqual({ value: 4000, error: null })
+  })
+
+  it('returns valid value for 9999999', () => {
+    expect(parseInputValue('9999999')).toEqual({ value: 9999999, error: null })
+  })
+
+  it('returns error for value above 9999999', () => {
+    const result = parseInputValue('10000000')
     expect(result.value).toBeNull()
-    expect(result.error).toBe('Range: 0–3999')
+    expect(result.error).toBe('Max: 9,999,999')
   })
 
   it('strips non-digit characters before parsing', () => {
