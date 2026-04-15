@@ -47,15 +47,34 @@ body {
   gap: 20px;
 }
 
+.app-title-row {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  padding-bottom: 16px;
+  border-bottom: 1px solid var(--gold-dim);
+}
+
 .app-title {
   font-family: var(--font-display);
   font-size: 16px;
   color: var(--gold);
   letter-spacing: 1px;
-  text-align: center;
-  padding-bottom: 16px;
-  border-bottom: 1px solid var(--gold-dim);
 }
+
+.range-info-btn {
+  background: none;
+  border: none;
+  color: var(--text-muted);
+  font-size: 14px;
+  cursor: pointer;
+  padding: 0 2px;
+  line-height: 1;
+  transition: color 0.15s;
+  flex-shrink: 0;
+}
+.range-info-btn:hover { color: var(--gold); }
 
 .tile-area {
   padding: 24px;
@@ -211,7 +230,10 @@ body {
   min-height: 100px;
   transition: border-color 0.15s, box-shadow 0.15s;
 }
-.numeral-tile:hover {
+.numeral-tile.clickable {
+  cursor: pointer;
+}
+.numeral-tile.clickable:hover {
   border-color: var(--gold);
   box-shadow: 0 0 8px rgba(201, 168, 76, 0.15);
 }
@@ -261,10 +283,123 @@ body {
 /* 11. System-specific font rules */
 .egyptian {
   font-family: 'NotoSansEgyptianHieroglyphs', var(--font-display);
-  font-size: 24px;
+  font-size: 28px;
 }
 
 .chineseRod {
   font-family: 'Noto Sans', var(--font-display);
   font-size: 24px;
+}
+
+/* 12. Expand modal */
+.tile-modal-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 1000;
+  background: rgba(0, 0, 0, 0.75);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+}
+
+.tile-modal-card {
+  background: var(--bg-card);
+  border: 1px solid var(--gold);
+  border-radius: var(--radius);
+  padding: 40px 48px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 24px;
+  cursor: default;
+  box-shadow: 0 0 40px rgba(201, 168, 76, 0.25);
+  max-width: 90vw;
+  max-height: 90vh;
+  overflow: auto;
+}
+
+.tile-modal-system-name {
+  font-size: 11px;
+  letter-spacing: 2px;
+  color: var(--text-muted);
+  text-transform: uppercase;
+}
+
+.tile-modal-content {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 80px;
+}
+
+.tile-modal-content .tile-numeral {
+  font-size: 72px;
+}
+
+.tile-modal-content .tile-no-rep {
+  font-size: 16px;
+}
+
+.tile-modal-close {
+  background: none;
+  border: 1px solid var(--gold-dim);
+  border-radius: var(--radius);
+  color: var(--text-muted);
+  font-family: var(--font-ui);
+  font-size: 12px;
+  padding: 6px 16px;
+  cursor: pointer;
+  transition: color 0.15s, border-color 0.15s;
+}
+.tile-modal-close:hover {
+  color: var(--gold);
+  border-color: var(--gold);
+}
+
+/* 13. Range modal table */
+.range-modal-card {
+  min-width: 280px;
+}
+
+.range-table {
+  border-collapse: collapse;
+  width: 100%;
+}
+
+.range-table-th {
+  font-size: 9px;
+  letter-spacing: 1.5px;
+  color: var(--text-muted);
+  text-transform: uppercase;
+  padding: 0 8px 10px;
+  border-bottom: 1px solid var(--gold-dim);
+}
+
+.range-table-th--right,
+.range-table-td--right {
+  text-align: right;
+}
+
+.range-table-row:not(:last-child) td {
+  border-bottom: 1px solid rgba(201, 168, 76, 0.1);
+}
+
+.range-table-td {
+  font-size: 13px;
+  color: var(--text-main);
+  padding: 8px 8px;
+}
+
+/* 14. Out-of-range modal content */
+.tile-modal-out-of-range {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+}
+
+.tile-modal-range {
+  font-size: 13px;
+  color: var(--text-muted);
 }
