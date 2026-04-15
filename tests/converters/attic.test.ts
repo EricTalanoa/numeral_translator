@@ -30,7 +30,10 @@ describe('Attic — fromArabic', () => {
   it('3999 → ΧΧΧΠΗΗΗΗΠΔΔΔΔΠΙΙΙΙ', () =>
     expect(fromArabic(3999)).toBe(X.repeat(3) + PH + H.repeat(4) + PD + D.repeat(4) + P + I.repeat(4)))
   it('throws on non-integer', () => expect(() => fromArabic(1.5)).toThrow('Input must be an integer'))
-  it('throws on 4000', () => expect(() => fromArabic(4000)).toThrow('Out of range: 4000'))
+  it('4000 → ΧΧΧΧ', () => expect(fromArabic(4000)).toBe(X.repeat(4)))
+  it('9999 → 9×Χ + ΠΗ + 4×Η + ΠΔ + 4×Δ + Π + 4×Ι', () =>
+    expect(fromArabic(9999)).toBe(X.repeat(9) + PH + H.repeat(4) + PD + D.repeat(4) + P + I.repeat(4)))
+  it('throws on 10000', () => expect(() => fromArabic(10000)).toThrow('Out of range: 10000'))
   it('throws on -1', () => expect(() => fromArabic(-1)).toThrow('Out of range: -1'))
 })
 
@@ -49,7 +52,7 @@ describe('Attic — toArabic', () => {
 })
 
 describe('Attic — round-trips', () => {
-  const cases = [1, 5, 9, 50, 99, 500, 999, 1000, 1776, 3999]
+  const cases = [1, 5, 9, 50, 99, 500, 999, 1000, 1776, 3999, 4000, 9999]
   for (const n of cases) {
     it(`round-trip ${n}`, () => expect(toArabic(fromArabic(n))).toBe(n))
   }

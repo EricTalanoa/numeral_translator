@@ -13,18 +13,19 @@ const WEDGE_GAP = 2  // gap between wedges within a row
 
 interface BabylonianSvgProps {
   encoded: string
+  scale?: number
 }
 
 function renderCornerWedge(x: number, y: number, k: number): JSX.Element {
   // L-shaped path representing value 10
   const d = `M ${x},${y} L ${x + CORNER_W},${y} L ${x + CORNER_W},${y + 4} L ${x + 4},${y + 4} L ${x + 4},${y + CORNER_H} L ${x},${y + CORNER_H} Z`
-  return <path key={k} d={d} fill="#4a3728" />
+  return <path key={k} d={d} fill="#c8a97d" />
 }
 
 function renderVertWedge(x: number, y: number, k: number): JSX.Element {
-  // Downward-pointing triangle representing value 1
-  const pts = `${x + VERT_W / 2},${y} ${x},${y + VERT_H} ${x + VERT_W},${y + VERT_H}`
-  return <polygon key={k} points={pts} fill="#4a3728" />
+  // Cuneiform nail shape: wide base at top, point at bottom (stylus pressed into clay)
+  const pts = `${x},${y} ${x + VERT_W},${y} ${x + VERT_W / 2},${y + VERT_H}`
+  return <polygon key={k} points={pts} fill="#c8a97d" />
 }
 
 function renderGroup(value: number, offsetX: number, key: number): JSX.Element {
@@ -48,18 +49,22 @@ function renderGroup(value: number, offsetX: number, key: number): JSX.Element {
   // Empty group (value 0): small centered circle
   const empty = (value === 0)
     ? [<circle key="empty" cx={offsetX + GROUP_WIDTH / 2} cy={GROUP_HEIGHT / 2}
-        r={4} fill="none" stroke="#4a3728" strokeWidth={1.5} />]
+        r={4} fill="none" stroke="#c8a97d" strokeWidth={1.5} />]
     : []
 
   return <g key={key}>{tens}{ones}{empty}</g>
 }
 
-export function BabylonianSvg({ encoded }: BabylonianSvgProps): JSX.Element {
+export function BabylonianSvg({ encoded, scale = 1 }: BabylonianSvgProps): JSX.Element {
   if (encoded === '\u2205') {
     return (
-      <svg width={GROUP_WIDTH} height={GROUP_HEIGHT} data-testid="babylonian-svg">
+      <svg
+        width={GROUP_WIDTH * scale} height={GROUP_HEIGHT * scale}
+        viewBox={`0 0 ${GROUP_WIDTH} ${GROUP_HEIGHT}`}
+        data-testid="babylonian-svg"
+      >
         <text x={GROUP_WIDTH / 2} y={GROUP_HEIGHT / 2 + 6}
-          textAnchor="middle" fill="#4a3728" fontSize={20}>∅</text>
+          textAnchor="middle" fill="#c8a97d" fontSize={20}>∅</text>
       </svg>
     )
   }
@@ -68,7 +73,11 @@ export function BabylonianSvg({ encoded }: BabylonianSvgProps): JSX.Element {
   const totalWidth = groups.length * GROUP_WIDTH + Math.max(0, groups.length - 1) * GAP
 
   return (
-    <svg width={totalWidth} height={GROUP_HEIGHT} data-testid="babylonian-svg">
+    <svg
+      width={totalWidth * scale} height={GROUP_HEIGHT * scale}
+      viewBox={`0 0 ${totalWidth} ${GROUP_HEIGHT}`}
+      data-testid="babylonian-svg"
+    >
       {groups.map((group, i) =>
         renderGroup(group, i * (GROUP_WIDTH + GAP), i)
       )}

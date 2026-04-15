@@ -13,7 +13,9 @@ describe('Mayan — fromArabic', () => {
   it('819 → "2,0,19" (zero in middle)', () => expect(fromArabic(819)).toBe('2,0,19'))
   it('3999 → "9,19,19" (max)', () => expect(fromArabic(3999)).toBe('9,19,19'))
   it('throws on non-integer', () => expect(() => fromArabic(1.5)).toThrow('Input must be an integer'))
-  it('throws on 4000', () => expect(() => fromArabic(4000)).toThrow('Out of range: 4000'))
+  it('4000 → "10,0,0"', () => expect(fromArabic(4000)).toBe('10,0,0'))
+  it('999999 → "6,4,19,19,19"', () => expect(fromArabic(999999)).toBe('6,4,19,19,19'))
+  it('throws on 1000000', () => expect(() => fromArabic(1000000)).toThrow('Out of range: 1000000'))
   it('throws on -1', () => expect(() => fromArabic(-1)).toThrow('Out of range: -1'))
 })
 
@@ -29,7 +31,7 @@ describe('Mayan — toArabic', () => {
 })
 
 describe('Mayan — round-trips', () => {
-  const cases = [0, 1, 19, 20, 40, 400, 819, 3999]
+  const cases = [0, 1, 19, 20, 40, 400, 819, 3999, 4000, 999999]
   for (const n of cases) {
     it(`round-trip ${n}`, () => expect(toArabic(fromArabic(n))).toBe(n))
   }

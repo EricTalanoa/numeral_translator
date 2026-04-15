@@ -25,7 +25,7 @@ const SYMBOL_VALUES: Record<string, number> = {
 
 export function fromArabic(n: number): string {
   if (!Number.isInteger(n)) throw new Error('Input must be an integer')
-  if (n < 0 || n > 3999) throw new Error(`Out of range: ${n}`)
+  if (n < 0 || n > 9999) throw new Error(`Out of range: ${n}`)
   if (n === 0) return '\u2205' // ∅
 
   let result = ''

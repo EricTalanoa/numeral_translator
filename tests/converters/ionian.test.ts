@@ -27,7 +27,13 @@ describe('Ionian — fromArabic', () => {
   it('3999 → ͵γϡϟθʹ', () =>
     expect(fromArabic(3999)).toBe(PREFIX + gamma + sampi + koppa + theta + KERAIA))
   it('throws on non-integer', () => expect(() => fromArabic(1.5)).toThrow('Input must be an integer'))
-  it('throws on 4000', () => expect(() => fromArabic(4000)).toThrow('Out of range: 4000'))
+  it('4000 → ͵δʹ', () =>
+    expect(fromArabic(4000)).toBe('\u0375\u03B4\u02B9'))
+  it('9000 → ͵θʹ', () =>
+    expect(fromArabic(9000)).toBe('\u0375\u03B8\u02B9'))
+  it('9999 → ͵θϡϟθʹ', () =>
+    expect(fromArabic(9999)).toBe('\u0375\u03B8\u03E1\u03DF\u03B8\u02B9'))
+  it('throws on 10000', () => expect(() => fromArabic(10000)).toThrow('Out of range: 10000'))
   it('throws on -1', () => expect(() => fromArabic(-1)).toThrow('Out of range: -1'))
 })
 
@@ -43,7 +49,7 @@ describe('Ionian — toArabic', () => {
 })
 
 describe('Ionian — round-trips', () => {
-  const cases = [1, 6, 9, 90, 900, 1000, 1776, 3999]
+  const cases = [1, 6, 9, 90, 900, 1000, 1776, 3999, 4000, 9000, 9999]
   for (const n of cases) {
     it(`round-trip ${n}`, () => expect(toArabic(fromArabic(n))).toBe(n))
   }

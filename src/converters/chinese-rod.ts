@@ -19,7 +19,7 @@ const HORIZ_MAP = new Map<string, number>(HORIZ.slice(1).map((g, i) => [g, i + 1
 
 export function fromArabic(n: number): string {
   if (!Number.isInteger(n)) throw new Error('Input must be an integer')
-  if (n < 0 || n > 3999) throw new Error(`Out of range: ${n}`)
+  if (n < 0 || n > 999_999) throw new Error(`Out of range: ${n}`)
   if (n === 0) return '\u2205' // ∅
 
   const digits: number[] = []

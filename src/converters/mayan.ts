@@ -6,7 +6,7 @@
 
 export function fromArabic(n: number): string {
   if (!Number.isInteger(n)) throw new Error('Input must be an integer')
-  if (n < 0 || n > 3999) throw new Error(`Out of range: ${n}`)
+  if (n < 0 || n > 999_999) throw new Error(`Out of range: ${n}`)
   if (n === 0) return 'shell'
 
   const digits: number[] = []

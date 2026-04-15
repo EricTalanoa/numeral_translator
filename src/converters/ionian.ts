@@ -2,7 +2,18 @@
 // ͵ = U+0375 (GREEK LOWER NUMERAL SIGN, thousands prefix)
 // ʹ = U+02B9 (MODIFIER LETTER PRIME, keraia, appended after numeral)
 
-const THOUSANDS = ['', '\u0375\u03B1', '\u0375\u03B2', '\u0375\u03B3']
+const THOUSANDS = [
+  '',
+  '\u0375\u03B1',  // ͵α = 1,000
+  '\u0375\u03B2',  // ͵β = 2,000
+  '\u0375\u03B3',  // ͵γ = 3,000
+  '\u0375\u03B4',  // ͵δ = 4,000
+  '\u0375\u03B5',  // ͵ε = 5,000
+  '\u0375\u03DB',  // ͵ϛ = 6,000 (stigma/digamma)
+  '\u0375\u03B6',  // ͵ζ = 7,000
+  '\u0375\u03B7',  // ͵η = 8,000
+  '\u0375\u03B8',  // ͵θ = 9,000
+]
 const HUNDREDS  = ['', '\u03C1', '\u03C3', '\u03C4', '\u03C5', '\u03C6', '\u03C7', '\u03C8', '\u03C9', '\u03E1']
 const TENS      = ['', '\u03B9', '\u03BA', '\u03BB', '\u03BC', '\u03BD', '\u03BE', '\u03BF', '\u03C0', '\u03DF']
 const UNITS     = ['', '\u03B1', '\u03B2', '\u03B3', '\u03B4', '\u03B5', '\u03DB', '\u03B6', '\u03B7', '\u03B8']
@@ -21,7 +32,7 @@ const LETTER_TO_VALUE: Record<string, number> = {
 
 export function fromArabic(n: number): string {
   if (!Number.isInteger(n)) throw new Error('Input must be an integer')
-  if (n < 0 || n > 3999) throw new Error(`Out of range: ${n}`)
+  if (n < 0 || n > 9999) throw new Error(`Out of range: ${n}`)
   if (n === 0) return '\u2205' // ∅
 
   const t = Math.floor(n / 1000)
