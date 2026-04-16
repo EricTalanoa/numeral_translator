@@ -1,3 +1,5 @@
+import type { BreakdownToken } from './types'
+
 // Attic (Herodianic) Greek acrophonic numerals
 // All characters are standard Greek capitals (BMP), no special font needed.
 // Ι=U+0399, Π=U+03A0, Δ=U+0394, Η=U+0397, Χ=U+03A7
@@ -60,4 +62,21 @@ export function toArabic(input: string): number {
     }
   }
   return result
+}
+
+export function explain(n: number): BreakdownToken[] {
+  if (!Number.isInteger(n)) throw new Error('Input must be an integer')
+  if (n < 0 || n > 9_999) throw new Error(`Out of range: ${n}`)
+  if (n === 0) return []
+
+  const tokens: BreakdownToken[] = []
+  let remaining = n
+  for (const [value, symbol] of TABLE) {
+    if (remaining >= value) {
+      const count = Math.floor(remaining / value)
+      tokens.push({ display: symbol.repeat(count), value: value * count })
+      remaining -= value * count
+    }
+  }
+  return tokens
 }
