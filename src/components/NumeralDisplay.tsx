@@ -15,7 +15,7 @@ export function NumeralDisplay({
   value,
   scale = 1,
   fontReady = false,
-}: NumeralDisplayProps): React.ReactElement {
+}: NumeralDisplayProps): JSX.Element {
   const output = system.fromArabic(value)
 
   if (output === '∅') {
