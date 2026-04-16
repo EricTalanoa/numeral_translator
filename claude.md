@@ -1,9 +1,12 @@
 # Numeral Translator — Claude Code Session Guide
 
 ## Current Status
-**Phases 4+5 complete.** 547/547 tests passing. TypeScript clean.
+**Phases 4+5 complete.** 1529/1529 tests passing. TypeScript clean.
 On `main` branch.
-**Next: Phase 6 Quiz Mode** (stretch goal — see Phase Checklist).
+**Next: Phase 6 Quiz Mode** — spec and plan already written, ready to implement.
+- Spec: `docs/superpowers/specs/2026-04-15-quiz-mode-design.md`
+- Plan: `docs/superpowers/plans/2026-04-15-quiz-mode.md`
+- Start with Task 1 (NumeralDisplay extraction) using subagent-driven-development.
 
 ## What this project is
 A React + Vite + TypeScript web app that translates Arabic integers into
