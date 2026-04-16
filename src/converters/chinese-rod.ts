@@ -1,3 +1,5 @@
+import type { BreakdownToken } from './types'
+
 // Chinese Rod Numerals (算籌, suànchóu) — decimal positional with alternating orientation.
 // Even positions (ones=0, hundreds=2, ...): VERTICAL rods (U+1D360–U+1D368)
 // Odd positions  (tens=1, thousands=3, ...): HORIZONTAL rods (U+1D369–U+1D371)
@@ -62,4 +64,31 @@ export function toArabic(input: string): number {
     }
   }
   return result
+}
+
+export function explain(n: number): BreakdownToken[] {
+  if (!Number.isInteger(n)) throw new Error('Input must be an integer')
+  if (n < 0 || n > 999_999) throw new Error(`Out of range: ${n}`)
+  if (n === 0) return []
+
+  const digits: number[] = []
+  let temp = n
+  while (temp > 0) {
+    digits.unshift(temp % 10)
+    temp = Math.floor(temp / 10)
+  }
+
+  const tokens: BreakdownToken[] = []
+  for (let i = 0; i < digits.length; i++) {
+    const digit = digits[i]
+    if (digit === 0) continue
+    const position = digits.length - 1 - i   // 0 = ones (rightmost)
+    const placeValue = Math.pow(10, position)
+    const orientation = position % 2 === 0 ? 'vertical' : 'horizontal'
+    tokens.push({
+      display: `${orientation}-${digit} (×${placeValue})`,
+      value: digit * placeValue,
+    })
+  }
+  return tokens
 }

@@ -1,7 +1,6 @@
 import { useState, useEffect } from 'react'
-import type { Converter } from '../converters/index'
-import { MayanSvg } from '../renderers/MayanSvg'
-import { BabylonianSvg } from '../renderers/BabylonianSvg'
+import type { Converter, BreakdownToken } from '../converters/index'
+import { NumeralDisplay } from './NumeralDisplay'
 
 interface NumeralTileProps {
   system: Converter
@@ -11,20 +10,27 @@ interface NumeralTileProps {
 export function NumeralTile({ system, value }: NumeralTileProps) {
   const [fontReady, setFontReady] = useState(false)
   const [expanded, setExpanded] = useState(false)
+  const [view, setView] = useState<'numeral' | 'breakdown'>('numeral')
 
   useEffect(() => {
-    if (system.id !== 'egyptian') return
-    if (document.fonts.check('1em NotoSansEgyptianHieroglyphs')) {
+    if (system.id !== 'egyptian' && system.id !== 'oldChurchSlavonic') return
+    const fontName = system.id === 'egyptian'
+      ? 'NotoSansEgyptianHieroglyphs'
+      : 'PonomarUnicode'
+    if (document.fonts.check(`1em ${fontName}`)) {
       setFontReady(true)
       return
     }
-    document.fonts.load('1em NotoSansEgyptianHieroglyphs')
+    document.fonts.load(`1em ${fontName}`)
       .then(() => setFontReady(true))
       .catch(() => setFontReady(true))
   }, [system.id])
 
   useEffect(() => {
-    if (!expanded) return
+    if (!expanded) {
+      setView('numeral')
+      return
+    }
     function handleKey(e: KeyboardEvent) {
       if (e.key === 'Escape') setExpanded(false)
     }
@@ -33,39 +39,15 @@ export function NumeralTile({ system, value }: NumeralTileProps) {
   }, [expanded])
 
   const outOfRange = value !== null && value > system.maxValue
+  const canBreakdown = value !== null && !outOfRange && value !== 0
 
   function renderContent(scale = 1): JSX.Element {
-    if (value === null) {
-      return <span className="tile-placeholder">—</span>
-    }
-
-    if (outOfRange) {
-      return <span className="tile-no-rep">out of range</span>
-    }
-
-    const output = system.fromArabic(value)
-
-    // ∅ check first — all systems except Mayan return '∅' for zero
-    if (output === '∅') {
-      return <span className="tile-no-rep">No representation</span>
-    }
-
-    if (system.id === 'mayan') {
-      return <MayanSvg encoded={output} scale={scale} />
-    }
-
-    if (system.id === 'babylonian') {
-      return <BabylonianSvg encoded={output} scale={scale} />
-    }
-
-    if (system.id === 'egyptian' && !fontReady) {
-      return <span className="tile-loading">Loading font…</span>
-    }
-
-    return <span className={`tile-numeral ${system.id}`}>{output}</span>
+    if (value === null) return <span className="tile-placeholder">—</span>
+    if (outOfRange) return <span className="tile-no-rep">out of range</span>
+    return <NumeralDisplay system={system} value={value} scale={scale} fontReady={fontReady} />
   }
 
-  function renderModalContent(): JSX.Element {
+  function renderModalNumeralContent(): JSX.Element {
     if (outOfRange) {
       return (
         <div className="tile-modal-out-of-range">
@@ -76,7 +58,28 @@ export function NumeralTile({ system, value }: NumeralTileProps) {
         </div>
       )
     }
-    return renderContent(3)
+    return <NumeralDisplay system={system} value={value!} scale={3} fontReady={fontReady} />
+  }
+
+  function renderBreakdown(): JSX.Element {
+    if (!canBreakdown) return <span className="tile-no-rep">No breakdown available</span>
+    const tokens: BreakdownToken[] = system.explain(value!)
+    return (
+      <table className="breakdown-table">
+        <tbody>
+          {tokens.map((t, i) => (
+            <tr key={i}>
+              <td className={system.id}>{t.display}</td>
+              <td>{t.value.toLocaleString('en-US')}</td>
+            </tr>
+          ))}
+          <tr className="breakdown-total">
+            <td>total</td>
+            <td>{value!.toLocaleString('en-US')}</td>
+          </tr>
+        </tbody>
+      </table>
+    )
   }
 
   const isClickable = value !== null
@@ -96,13 +99,28 @@ export function NumeralTile({ system, value }: NumeralTileProps) {
       {expanded && (
         <div className="tile-modal-overlay" onClick={() => setExpanded(false)}>
           <div className="tile-modal-card" onClick={e => e.stopPropagation()}>
-            <div className="tile-modal-system-name">{system.label}</div>
-            <div className="tile-modal-content">
-              {renderModalContent()}
-            </div>
             <button className="tile-modal-close" onClick={() => setExpanded(false)}>
-              close ×
+              ×
             </button>
+            <div className="tile-modal-system-name">{system.label}</div>
+            <div className="tile-modal-tabs">
+              <button
+                className={`tile-modal-tab${view === 'numeral' ? ' active' : ''}`}
+                onClick={() => setView('numeral')}
+              >
+                Numeral
+              </button>
+              <button
+                className={`tile-modal-tab${view === 'breakdown' ? ' active' : ''}`}
+                onClick={() => setView('breakdown')}
+                disabled={!canBreakdown}
+              >
+                Breakdown
+              </button>
+            </div>
+            <div className={`tile-modal-content${view === 'breakdown' ? ' tile-modal-content--breakdown' : ''}`}>
+              {view === 'numeral' ? renderModalNumeralContent() : renderBreakdown()}
+            </div>
           </div>
         </div>
       )}

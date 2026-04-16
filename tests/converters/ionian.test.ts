@@ -1,5 +1,6 @@
 import { describe, it, expect } from 'vitest'
 import { fromArabic, toArabic } from '../../src/converters/ionian'
+import { explain } from '../../src/converters/ionian'
 
 // Unicode constants
 const KERAIA = '\u02B9'             // ʹ
@@ -64,4 +65,20 @@ describe('Ionian — uppercase input', () => {
   it('lowercase beta: βʹ → 2', () => {
     expect(toArabic(beta + KERAIA)).toBe(2)
   })
+})
+
+describe('Ionian — explain', () => {
+  it('returns [] for 0', () => expect(explain(0)).toEqual([]))
+  it('1 → [{α, 1}]', () => expect(explain(1)).toEqual([{ display: '\u03B1', value: 1 }]))
+  it('42 → [{μ,40},{β,2}]', () => expect(explain(42)).toEqual([
+    { display: '\u03BC', value: 40 },
+    { display: '\u03B2', value: 2 },
+  ]))
+  it('tokens sum to 1000', () => {
+    expect(explain(1000).reduce((a, t) => a + t.value, 0)).toBe(1000)
+  })
+  it('tokens sum to 9999', () => {
+    expect(explain(9999).reduce((a, t) => a + t.value, 0)).toBe(9999)
+  })
+  it('throws on out-of-range', () => expect(() => explain(10000)).toThrow('Out of range'))
 })

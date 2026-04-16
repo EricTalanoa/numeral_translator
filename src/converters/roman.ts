@@ -1,3 +1,5 @@
+import type { BreakdownToken } from './types'
+
 const TABLE: [number, string][] = [
   [1000, 'M'], [900, 'CM'], [500, 'D'], [400, 'CD'],
   [100, 'C'], [90, 'XC'], [50, 'L'], [40, 'XL'],
@@ -50,4 +52,21 @@ export function toArabic(input: string): number {
   }
 
   return result
+}
+
+export function explain(n: number): BreakdownToken[] {
+  if (!Number.isInteger(n)) throw new Error('Input must be an integer')
+  if (n < 0 || n > 3_999) throw new Error(`Out of range: ${n}`)
+  if (n === 0) return []
+
+  const tokens: BreakdownToken[] = []
+  let remaining = n
+  for (const [value, symbol] of TABLE) {
+    if (remaining >= value) {
+      const count = Math.floor(remaining / value)
+      tokens.push({ display: symbol.repeat(count), value: value * count })
+      remaining -= value * count
+    }
+  }
+  return tokens
 }

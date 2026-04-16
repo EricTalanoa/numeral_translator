@@ -1,5 +1,6 @@
 import { describe, it, expect } from 'vitest'
 import { fromArabic, toArabic } from '../../src/converters/attic'
+import { explain } from '../../src/converters/attic'
 
 // Unicode constants for Attic symbols
 const I  = '\u0399' // Ι = 1
@@ -56,4 +57,20 @@ describe('Attic — round-trips', () => {
   for (const n of cases) {
     it(`round-trip ${n}`, () => expect(toArabic(fromArabic(n))).toBe(n))
   }
+})
+
+describe('Attic — explain', () => {
+  it('returns [] for 0', () => expect(explain(0)).toEqual([]))
+  it('1 → [{Ι,1}]', () => expect(explain(1)).toEqual([{ display: '\u0399', value: 1 }]))
+  it('42 → [{ΔΔΔΔ,40},{ΙΙ,2}]', () => expect(explain(42)).toEqual([
+    { display: '\u0394\u0394\u0394\u0394', value: 40 },
+    { display: '\u0399\u0399', value: 2 },
+  ]))
+  it('tokens sum to 1492', () => {
+    expect(explain(1492).reduce((a, t) => a + t.value, 0)).toBe(1492)
+  })
+  it('tokens sum to 9999', () => {
+    expect(explain(9999).reduce((a, t) => a + t.value, 0)).toBe(9999)
+  })
+  it('throws on out-of-range', () => expect(() => explain(10000)).toThrow('Out of range'))
 })

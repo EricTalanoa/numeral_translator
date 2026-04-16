@@ -1,5 +1,6 @@
 import { describe, it, expect } from 'vitest'
 import { fromArabic, toArabic } from '../../src/converters/mayan'
+import { explain } from '../../src/converters/mayan'
 
 describe('Mayan — fromArabic', () => {
   it('0 → "shell" (genuine zero)', () => expect(fromArabic(0)).toBe('shell'))
@@ -35,4 +36,27 @@ describe('Mayan — round-trips', () => {
   for (const n of cases) {
     it(`round-trip ${n}`, () => expect(toArabic(fromArabic(n))).toBe(n))
   }
+})
+
+describe('Mayan — explain', () => {
+  it('returns [] for 0', () => expect(explain(0)).toEqual([]))
+  it('1 → [{1 dot in the 1s place, 1}]', () => {
+    expect(explain(1)).toEqual([{ display: '1 dot in the 1s place', value: 1 }])
+  })
+  it('5 → [{1 bar in the 1s place, 5}]', () => {
+    expect(explain(5)).toEqual([{ display: '1 bar in the 1s place', value: 5 }])
+  })
+  it('tokens sum to 42', () => {
+    expect(explain(42).reduce((a, t) => a + t.value, 0)).toBe(42)
+  })
+  it('42 = 2×20 + 2 → two groups', () => {
+    const tokens = explain(42)
+    expect(tokens).toHaveLength(2)
+    expect(tokens[0]).toEqual({ display: '2 dots in the 20s place', value: 40 })
+    expect(tokens[1]).toEqual({ display: '2 dots in the 1s place', value: 2 })
+  })
+  it('tokens sum to 1492', () => {
+    expect(explain(1492).reduce((a, t) => a + t.value, 0)).toBe(1492)
+  })
+  it('throws on out-of-range', () => expect(() => explain(1_000_000)).toThrow('Out of range'))
 })
