@@ -351,6 +351,14 @@ body {
   min-height: 80px;
 }
 
+.tile-modal-content--breakdown {
+  align-items: flex-start;
+  justify-content: flex-start;
+  max-height: 55vh;
+  overflow-y: auto;
+  width: 100%;
+}
+
 .tile-modal-content .tile-numeral {
   font-size: 72px;
 }

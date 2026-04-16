@@ -137,7 +137,7 @@ export function NumeralTile({ system, value }: NumeralTileProps) {
                 Breakdown
               </button>
             </div>
-            <div className="tile-modal-content">
+            <div className={`tile-modal-content${view === 'breakdown' ? ' tile-modal-content--breakdown' : ''}`}>
               {view === 'numeral' ? renderModalNumeralContent() : renderBreakdown()}
             </div>
             <button className="tile-modal-close" onClick={() => setExpanded(false)}>
