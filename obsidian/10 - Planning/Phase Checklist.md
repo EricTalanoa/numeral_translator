@@ -130,28 +130,19 @@ Complexity estimates: S = simple (< 1 hour), M = moderate (1-3 hours), L = compl
 
 ---
 
-## Phase 4 — Quiz Mode (Stretch Goal)
-*Begin only after Phase 3 is fully signed off.*
-*(quiz now covers 9 systems)*
+## Phase 6 — Quiz Mode (Stretch Goal) ✅ COMPLETE
+*Completed 2026-04-16. Merged to main.*
+*(covers all 10 systems)*
 
-**Concept:** The app displays a numeral in one system and asks the user to type the Arabic value. Immediate feedback (correct / incorrect + explanation).
+- [x] Extract `NumeralDisplay` shared component from `NumeralTile` — 7 tests ✅
+- [x] `QuizControls.tsx` — 10 system checkboxes, at-least-one enforcement, Reset Score — 5 tests ✅
+- [x] `QuizPanel.tsx` + `generateQuestion` — question/feedback state machine, score tracking, Enter key — 12 tests ✅
+- [x] Wire `App.tsx` — mode tab strip, conditional QuizControls/QuizPanel, `key={quizResetKey}` reset ✅
+- [x] Quiz CSS — mode tabs, quiz card, score, correct/wrong feedback, input, Next Question ✅
 
-### Scope
+### Definition of Done ✅
 
-- [ ] Quiz mode toggle in the nav — **S**
-- [ ] `QuizPanel.tsx` — generates a question, accepts an answer — **M**
-  - Pick a random system and a random number (1–3999)
-  - Display `fromArabic(n)` in that system
-  - Text field for user's answer
-  - On submit: compare to `n`, show correct/incorrect
-  - "Show explanation" expands to show the correct value in all systems
-- [ ] Configurable difficulty: easy (Roman, Egyptian), medium (Mayan, Attic), hard (Babylonian, Ionian, Chinese Rod) — **M**
-- [ ] Score tracker (session-local, no persistence) — **S**
-- [ ] Hint button: reveals system name if user has "system selection" hint mode off — **S**
-
-### Definition of Done
-
-Quiz mode generates valid questions for all 7 systems. Answer evaluation is correct. Score tracker increments. No new converter logic needed (quiz reuses existing `fromArabic`).
+571/571 tests passing. TypeScript clean. Quiz mode generates valid questions for all 10 systems. Answer evaluation correct. Score resets on "Reset Score". System checkboxes filter the question pool.
 
 ---
 

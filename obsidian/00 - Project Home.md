@@ -1,7 +1,7 @@
 # Numeral Translator — Project Home
 
-## Status: Phase 3 Complete — 435/435 tests passing; Phase 4 (Quiz Mode) next
-**Last updated:** 2026-04-15
+## Status: Phase 6 Complete — 571/571 tests passing; Phase 7 (history pages) next
+**Last updated:** 2026-04-16
 
 ---
 
@@ -29,13 +29,23 @@
 `https://github.com/EricTalanoa/numeral_translator.git`
 
 ## Current Blockers
-- None. Working in `.worktrees/phase2-ui`, branch `feature/phase2-ui`.
-  Phase 3 complete. 435/435 tests passing. Next: Phase 4 Quiz Mode (stretch goal).
+- None. Phase 6 (Quiz Mode) complete and merged to main. 571/571 tests passing.
+  Next: Phase 7 — Per-language history pages (stretch goal, not yet planned).
 
 ---
 
 ## Session Log
 *(Newest at top — append only)*
+
+### 2026-04-16 — Phase 6 Quiz Mode complete and merged to main
+- **NumeralDisplay** extracted from NumeralTile into shared component — 7 tests
+- **QuizControls** sidebar: 10 system checkboxes, at-least-one enforcement, Reset Score button — 5 tests
+- **QuizPanel**: question/feedback state machine, score tracking, `generateQuestion` pure export, Enter-key submit — 12 tests
+- **App.tsx** wired: mode tab strip (Translate / Quiz), conditional sidebar + main area, `key={quizResetKey}` reset pattern
+- **Quiz CSS** added: mode tabs, quiz card layout, score, feedback (green/red), input, Next Question button
+- All 4 tasks reviewed (spec compliance + code quality) via subagent-driven-development
+- **571/571 tests passing. TypeScript clean. Merged to main via PR.**
+- Next: Phase 7 — Per-language history pages (stretch goal, no plan yet)
 
 ### 2026-04-15 — Phase 3 QA complete: integration tests, edge cases, code review
 - **Integration tests added:** `tests/integration/round-trips.test.ts` (63 tests) — cross-system `toArabic(fromArabic(n))` for n in [1, 10, 42, 100, 999, 1000, 3999] across all 9 converters
