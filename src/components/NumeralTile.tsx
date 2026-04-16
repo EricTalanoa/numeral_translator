@@ -121,6 +121,9 @@ export function NumeralTile({ system, value }: NumeralTileProps) {
       {expanded && (
         <div className="tile-modal-overlay" onClick={() => setExpanded(false)}>
           <div className="tile-modal-card" onClick={e => e.stopPropagation()}>
+            <button className="tile-modal-close" onClick={() => setExpanded(false)}>
+              ×
+            </button>
             <div className="tile-modal-system-name">{system.label}</div>
             <div className="tile-modal-tabs">
               <button
@@ -140,9 +143,6 @@ export function NumeralTile({ system, value }: NumeralTileProps) {
             <div className={`tile-modal-content${view === 'breakdown' ? ' tile-modal-content--breakdown' : ''}`}>
               {view === 'numeral' ? renderModalNumeralContent() : renderBreakdown()}
             </div>
-            <button className="tile-modal-close" onClick={() => setExpanded(false)}>
-              close ×
-            </button>
           </div>
         </div>
       )}
