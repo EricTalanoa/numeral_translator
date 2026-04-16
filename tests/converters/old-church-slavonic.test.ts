@@ -29,7 +29,7 @@ describe('Old Church Slavonic — toArabic', () => {
 
 describe('Old Church Slavonic — explain', () => {
   it('returns [] for 0', () => expect(explain(0)).toEqual([]))
-  it('returns one token for 42', () => {
+  it('returns two tokens for 42', () => {
     const tokens = explain(42)
     expect(tokens).toEqual([
       { display: '\u041C', value: 40 },
@@ -46,4 +46,11 @@ describe('Old Church Slavonic — explain', () => {
     expect(sum).toBe(n)
   })
   it('throws on out-of-range', () => expect(() => explain(10000)).toThrow('Out of range'))
+})
+
+describe('Old Church Slavonic — round-trips', () => {
+  const cases = [1, 9, 10, 42, 100, 900, 999, 1000, 1492, 9999]
+  cases.forEach(n => {
+    it(`round-trip ${n}`, () => expect(toArabic(fromArabic(n))).toBe(n))
+  })
 })
