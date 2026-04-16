@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react'
 import type { Converter } from '../converters/index'
 import { MayanSvg } from '../renderers/MayanSvg'
 import { BabylonianSvg } from '../renderers/BabylonianSvg'
+import { ChineseRodSvg } from '../renderers/ChineseRodSvg'
 
 interface NumeralTileProps {
   system: Converter
@@ -59,6 +60,10 @@ export function NumeralTile({ system, value }: NumeralTileProps) {
 
     if (system.id === 'babylonian') {
       return <BabylonianSvg encoded={output} scale={scale} />
+    }
+
+    if (system.id === 'chineseRod') {
+      return <ChineseRodSvg encoded={output} scale={scale} />
     }
 
     if ((system.id === 'egyptian' || system.id === 'oldChurchSlavonic') && !fontReady) {
