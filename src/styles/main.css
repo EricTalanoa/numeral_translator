@@ -421,3 +421,62 @@ body {
   font-size: 13px;
   color: var(--text-muted);
 }
+
+/* 15. Breakdown tab */
+.tile-modal-tabs {
+  display: flex;
+  gap: 8px;
+  align-self: stretch;
+  border-bottom: 1px solid var(--gold-dim);
+  padding-bottom: 8px;
+}
+
+.tile-modal-tab {
+  flex: 1;
+  background: none;
+  border: none;
+  border-bottom: 2px solid transparent;
+  margin-bottom: -9px;
+  color: var(--text-muted);
+  font-family: var(--font-ui);
+  font-size: 12px;
+  padding: 6px 4px;
+  cursor: pointer;
+  transition: color 0.15s, border-color 0.15s;
+}
+.tile-modal-tab:hover:not(:disabled) { color: var(--text-main); }
+.tile-modal-tab.active {
+  color: var(--gold);
+  border-bottom-color: var(--gold);
+}
+.tile-modal-tab:disabled {
+  opacity: 0.35;
+  cursor: not-allowed;
+}
+
+.breakdown-table {
+  width: 100%;
+  min-width: 200px;
+  border-collapse: collapse;
+  font-family: var(--font-display);
+}
+
+.breakdown-table td {
+  padding: 6px 8px;
+  border-top: 1px solid rgba(201, 168, 76, 0.12);
+  font-size: 16px;
+  color: var(--text-main);
+}
+
+.breakdown-table td:last-child {
+  text-align: right;
+  color: #7cc87c;
+  font-family: var(--font-ui);
+  font-size: 14px;
+}
+
+.breakdown-total td {
+  color: #5c8db0 !important;
+  font-weight: bold;
+  border-top: 1px solid var(--gold-dim) !important;
+}
