@@ -1,3 +1,5 @@
+import type { BreakdownToken } from './types'
+
 // SMP codepoints: U+13068 (Heh=1M), U+13190 (tadpole=100k), U+130AD (finger=10k),
 // U+131BC (lotus=1k), U+13362 (rope=100), U+13386 (hobble=10), U+133FA (stroke=1)
 const SYMBOLS: [number, string][] = [
@@ -46,4 +48,21 @@ export function toArabic(input: string): number {
     result += val
   }
   return result
+}
+
+export function explain(n: number): BreakdownToken[] {
+  if (!Number.isInteger(n)) throw new Error('Input must be an integer')
+  if (n < 0 || n > 9_999_999) throw new Error(`Out of range: ${n}`)
+  if (n === 0) return []
+
+  const tokens: BreakdownToken[] = []
+  let remaining = n
+  for (const [value, glyph] of SYMBOLS) {
+    const count = Math.floor(remaining / value)
+    if (count > 0) {
+      tokens.push({ display: glyph.repeat(count), value: value * count })
+      remaining %= value
+    }
+  }
+  return tokens
 }

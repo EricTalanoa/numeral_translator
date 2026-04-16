@@ -1,5 +1,6 @@
 import { describe, it, expect } from 'vitest'
 import { fromArabic, toArabic } from '../../src/converters/egyptian'
+import { explain } from '../../src/converters/egyptian'
 
 // Use codepoint literals for SMP characters to avoid editor encoding issues
 const LOTUS  = '\u{131BC}' // 1000
@@ -54,4 +55,24 @@ describe('Egyptian — round-trips', () => {
   for (const n of cases) {
     it(`round-trip ${n}`, () => expect(toArabic(fromArabic(n))).toBe(n))
   }
+})
+
+describe('Egyptian — explain', () => {
+  it('returns [] for 0', () => expect(explain(0)).toEqual([]))
+  it('1 → one stroke token', () => {
+    expect(explain(1)).toEqual([{ display: '\u{133FA}', value: 1 }])
+  })
+  it('42 tokens sum to 42', () => {
+    expect(explain(42).reduce((a, t) => a + t.value, 0)).toBe(42)
+  })
+  it('42 → hobbles + strokes', () => {
+    expect(explain(42)).toEqual([
+      { display: '\u{13386}'.repeat(4), value: 40 },
+      { display: '\u{133FA}'.repeat(2), value: 2 },
+    ])
+  })
+  it('tokens sum to 1000', () => {
+    expect(explain(1000).reduce((a, t) => a + t.value, 0)).toBe(1000)
+  })
+  it('throws on out-of-range', () => expect(() => explain(10_000_000)).toThrow('Out of range'))
 })
