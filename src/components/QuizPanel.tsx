@@ -27,6 +27,7 @@ export function QuizPanel({ checkedIds }: QuizPanelProps) {
   const [score, setScore] = useState({ correct: 0, total: 0 })
   const [fontReady, setFontReady] = useState(false)
 
+  // Mirror of NumeralTile's font-loading effect — keep in sync if adding new font-gated systems.
   useEffect(() => {
     const id = phase.system.id
     if (id !== 'egyptian' && id !== 'oldChurchSlavonic') return
