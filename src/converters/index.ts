@@ -31,5 +31,5 @@ export const CONVERTERS: Converter[] = [
   { id: 'chineseRod',         label: 'Chinese Rod',           maxValue: 999_999,   ...chineseRod },
   { id: 'chineseTraditional', label: 'Chinese Traditional',   maxValue: 9_999_999, ...chineseTraditional },
   { id: 'glagolitic',         label: 'Glagolitic',            maxValue: 9_999,     ...glagolitic },
-  { id: 'oldChurchSlavonic', label: 'Old Church Slavonic',   maxValue: 9_999,     ...oldChurchSlavonic },
+  { id: 'oldChurchSlavonic',  label: 'Old Church Slavonic',   maxValue: 9_999,     ...oldChurchSlavonic },
 ]
