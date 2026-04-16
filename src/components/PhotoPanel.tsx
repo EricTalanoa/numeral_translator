@@ -1,6 +1,7 @@
 import { useState } from 'react'
 import { CONVERTERS } from '../converters/index'
 import { recognizeNumeral } from '../vision/vision-client'
+import type { FailureReason } from '../vision/vision-client'
 import { VisionOverride } from './VisionOverride'
 
 interface PhotoPanelProps {
@@ -12,7 +13,6 @@ function fileToBase64(file: File): Promise<string> {
     const reader = new FileReader()
     reader.onload = () => {
       const result = reader.result as string
-      // Strip "data:<mime>;base64," prefix
       resolve(result.split(',')[1])
     }
     reader.onerror = reject
@@ -20,17 +20,30 @@ function fileToBase64(file: File): Promise<string> {
   })
 }
 
+function errorMessage(reason: FailureReason | undefined): string {
+  switch (reason) {
+    case 'no-key':      return 'API key not configured — add VITE_CLAUDE_API_KEY to .env.local'
+    case 'api-error':   return 'API error — check the browser console for details'
+    case 'uncertain':   return "Claude couldn't confidently read this image — try a clearer photo"
+    case 'parse-failed':return 'Unexpected API response — check the browser console'
+    case 'network-error': return 'Network error — check your connection'
+    default:            return "Vision couldn't read the image — enter the value manually"
+  }
+}
+
 export function PhotoPanel({ onResult }: PhotoPanelProps) {
   const [selectedLabel, setSelectedLabel] = useState<string | null>(null)
   const [loading, setLoading] = useState(false)
-  const [error, setError] = useState(false)
+  const [failureReason, setFailureReason] = useState<FailureReason | undefined>(undefined)
+  const [showError, setShowError] = useState(false)
 
   async function handleFile(e: React.ChangeEvent<HTMLInputElement>) {
     const file = e.target.files?.[0]
     if (!file || !selectedLabel) return
 
     setLoading(true)
-    setError(false)
+    setShowError(false)
+    setFailureReason(undefined)
 
     try {
       const base64 = await fileToBase64(file)
@@ -41,21 +54,24 @@ export function PhotoPanel({ onResult }: PhotoPanelProps) {
         onResult(result.value)
         e.target.value = ''
       } else {
-        setError(true)
+        setFailureReason(result.failureReason)
+        setShowError(true)
       }
     } catch {
-      setError(true)
+      setShowError(true)
     } finally {
       setLoading(false)
     }
   }
 
-  if (error) {
+  if (showError) {
     return (
       <div className="photo-panel">
+        <p className="vision-override-message">{errorMessage(failureReason)}</p>
         <VisionOverride
           onResult={n => {
-            setError(false)
+            setShowError(false)
+            setFailureReason(undefined)
             onResult(n)
           }}
         />
