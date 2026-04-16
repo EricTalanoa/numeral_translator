@@ -1,3 +1,5 @@
+import type { BreakdownToken } from './types'
+
 // Mayan vigesimal (base-20) numerals — pure mathematical system, NOT Long Count calendar.
 // fromArabic returns comma-separated vigesimal digits, highest first: e.g. "9,19,19" for 3999.
 // Special: fromArabic(0) → "shell" (Mayan has a genuine zero).
@@ -38,4 +40,31 @@ export function toArabic(input: string): number {
     result = result * 20 + digit
   }
   return result
+}
+
+export function explain(n: number): BreakdownToken[] {
+  if (!Number.isInteger(n)) throw new Error('Input must be an integer')
+  if (n < 0 || n > 999_999) throw new Error(`Out of range: ${n}`)
+  if (n === 0) return []
+
+  const digits: number[] = []
+  let remaining = n
+  while (remaining > 0) {
+    digits.unshift(remaining % 20)
+    remaining = Math.floor(remaining / 20)
+  }
+
+  return digits.map((digit, i) => {
+    const placeValue = Math.pow(20, digits.length - 1 - i)
+    const bars = Math.floor(digit / 5)
+    const dots = digit % 5
+    const parts: string[] = []
+    if (bars > 0) parts.push(`${bars} bar${bars > 1 ? 's' : ''}`)
+    if (dots > 0) parts.push(`${dots} dot${dots > 1 ? 's' : ''}`)
+    if (digit === 0) parts.push('shell (0)')
+    return {
+      display: `${parts.join(' + ')} in the ${placeValue}s place`,
+      value: digit * placeValue,
+    }
+  }).filter(t => t.value > 0)
 }

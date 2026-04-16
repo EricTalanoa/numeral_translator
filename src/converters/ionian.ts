@@ -1,3 +1,5 @@
+import type { BreakdownToken } from './types'
+
 // Ionian (Milesian/Alphabetic) Greek numerals
 // ͵ = U+0375 (GREEK LOWER NUMERAL SIGN, thousands prefix)
 // ʹ = U+02B9 (MODIFIER LETTER PRIME, keraia, appended after numeral)
@@ -68,4 +70,22 @@ export function toArabic(input: string): number {
     i++
   }
   return result
+}
+
+export function explain(n: number): BreakdownToken[] {
+  if (!Number.isInteger(n)) throw new Error('Input must be an integer')
+  if (n < 0 || n > 9_999) throw new Error(`Out of range: ${n}`)
+  if (n === 0) return []
+
+  const t = Math.floor(n / 1000)
+  const h = Math.floor((n % 1000) / 100)
+  const d = Math.floor((n % 100) / 10)
+  const u = n % 10
+
+  const tokens: BreakdownToken[] = []
+  if (t > 0) tokens.push({ display: THOUSANDS[t], value: t * 1000 })
+  if (h > 0) tokens.push({ display: HUNDREDS[h], value: h * 100 })
+  if (d > 0) tokens.push({ display: TENS[d], value: d * 10 })
+  if (u > 0) tokens.push({ display: UNITS[u], value: u })
+  return tokens
 }

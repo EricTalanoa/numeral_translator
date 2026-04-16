@@ -11,11 +11,12 @@ const EXPECTED_IDS = [
   'chineseRod',
   'chineseTraditional',
   'glagolitic',
+  'oldChurchSlavonic',
 ]
 
 describe('CONVERTERS registry', () => {
-  it('contains exactly 9 converters', () => {
-    expect(CONVERTERS).toHaveLength(9)
+  it('contains exactly 10 converters', () => {
+    expect(CONVERTERS).toHaveLength(10)
   })
 
   it('has the correct system IDs in order', () => {

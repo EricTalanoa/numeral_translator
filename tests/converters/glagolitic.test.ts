@@ -1,5 +1,6 @@
 import { describe, it, expect } from 'vitest'
 import { fromArabic, toArabic } from '../../src/converters/glagolitic'
+import { explain } from '../../src/converters/glagolitic'
 
 describe('Glagolitic — fromArabic', () => {
   it('0 returns ∅',        () => expect(fromArabic(0)).toBe('\u2205'))
@@ -26,4 +27,21 @@ describe('Glagolitic — toArabic', () => {
 
   it('throws on fractions',    () => expect(() => toArabic('\u2C30.\u2C31')).toThrow())
   it('throws on unknown char', () => expect(() => toArabic('X')).toThrow())
+})
+
+describe('Glagolitic — explain', () => {
+  it('returns [] for 0', () => expect(explain(0)).toEqual([]))
+  it('1 → one token', () => expect(explain(1)).toHaveLength(1))
+  it('tokens sum to 42', () => {
+    expect(explain(42).reduce((a, t) => a + t.value, 0)).toBe(42)
+  })
+  it('tokens sum to 9999', () => {
+    expect(explain(9999).reduce((a, t) => a + t.value, 0)).toBe(9999)
+  })
+  it('1000 → one token, value 1000', () => {
+    const tokens = explain(1000)
+    expect(tokens).toHaveLength(1)
+    expect(tokens[0].value).toBe(1000)
+  })
+  it('throws on out-of-range', () => expect(() => explain(10000)).toThrow('Out of range'))
 })
