@@ -13,12 +13,15 @@ export function NumeralTile({ system, value }: NumeralTileProps) {
   const [expanded, setExpanded] = useState(false)
 
   useEffect(() => {
-    if (system.id !== 'egyptian') return
-    if (document.fonts.check('1em NotoSansEgyptianHieroglyphs')) {
+    if (system.id !== 'egyptian' && system.id !== 'oldChurchSlavonic') return
+    const fontName = system.id === 'egyptian'
+      ? 'NotoSansEgyptianHieroglyphs'
+      : 'PonomarUnicode'
+    if (document.fonts.check(`1em ${fontName}`)) {
       setFontReady(true)
       return
     }
-    document.fonts.load('1em NotoSansEgyptianHieroglyphs')
+    document.fonts.load(`1em ${fontName}`)
       .then(() => setFontReady(true))
       .catch(() => setFontReady(true))
   }, [system.id])
@@ -58,7 +61,7 @@ export function NumeralTile({ system, value }: NumeralTileProps) {
       return <BabylonianSvg encoded={output} scale={scale} />
     }
 
-    if (system.id === 'egyptian' && !fontReady) {
+    if ((system.id === 'egyptian' || system.id === 'oldChurchSlavonic') && !fontReady) {
       return <span className="tile-loading">Loading font…</span>
     }
 

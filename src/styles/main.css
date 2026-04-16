@@ -30,6 +30,14 @@ body {
   font-display: block;
 }
 
+@font-face {
+  font-family: 'PonomarUnicode';
+  src: url('/fonts/PonomarUnicode.ttf') format('truetype');
+  font-weight: normal;
+  font-style: normal;
+  font-display: block;
+}
+
 /* 4. Page layout */
 .app-layout {
   display: grid;
@@ -299,6 +307,11 @@ body {
 .glagolitic {
   font-family: 'Segoe UI Historic', var(--font-display);
   font-size: 24px;
+}
+
+.oldChurchSlavonic {
+  font-family: 'PonomarUnicode', var(--font-display);
+  font-size: 22px;
 }
 
 /* 12. Expand modal */
