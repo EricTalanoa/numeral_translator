@@ -1,5 +1,6 @@
 import { describe, it, expect } from 'vitest'
 import { fromArabic, toArabic } from '../../src/converters/roman'
+import { explain } from '../../src/converters/roman'
 
 describe('Roman — fromArabic', () => {
   it('0 → ∅', () => expect(fromArabic(0)).toBe('\u2205'))
@@ -40,4 +41,23 @@ describe('Roman — round-trips', () => {
   for (const n of cases) {
     it(`round-trip ${n}`, () => expect(toArabic(fromArabic(n))).toBe(n))
   }
+})
+
+describe('Roman — explain', () => {
+  it('returns [] for 0', () => expect(explain(0)).toEqual([]))
+  it('1 → [{I,1}]', () => expect(explain(1)).toEqual([{ display: 'I', value: 1 }]))
+  it('4 → [{IV,4}]', () => expect(explain(4)).toEqual([{ display: 'IV', value: 4 }]))
+  it('1492 tokens sum to 1492', () => {
+    const sum = explain(1492).reduce((a, t) => a + t.value, 0)
+    expect(sum).toBe(1492)
+  })
+  it('1492 → [{M,1000},{CD,400},{XC,90},{II,2}]', () => {
+    expect(explain(1492)).toEqual([
+      { display: 'M',  value: 1000 },
+      { display: 'CD', value: 400  },
+      { display: 'XC', value: 90   },
+      { display: 'II', value: 2    },
+    ])
+  })
+  it('throws on out-of-range', () => expect(() => explain(4000)).toThrow('Out of range'))
 })
