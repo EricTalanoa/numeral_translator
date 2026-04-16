@@ -1,10 +1,6 @@
 import { describe, it, expect, vi } from 'vitest'
 import { render, screen, fireEvent } from '@testing-library/react'
 import { QuizPanel, generateQuestion } from '../../src/components/QuizPanel'
-import { CONVERTERS } from '../../src/converters/index'
-
-const allIds = CONVERTERS.map(c => c.id)
-const roman = CONVERTERS.find(c => c.id === 'roman')!
 
 describe('generateQuestion', () => {
   it('returns a system from the checked pool', () => {

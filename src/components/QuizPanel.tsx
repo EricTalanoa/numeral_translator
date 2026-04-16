@@ -12,7 +12,8 @@ type Phase =
 
 export function generateQuestion(checkedIds: string[]): { system: Converter; value: number } {
   const pool = CONVERTERS.filter(c => checkedIds.includes(c.id))
-  const system = pool[Math.floor(Math.random() * pool.length)]
+  const safePool = pool.length > 0 ? pool : CONVERTERS
+  const system = safePool[Math.floor(Math.random() * safePool.length)]
   const value = Math.floor(Math.random() * system.maxValue) + 1
   return { system, value }
 }
