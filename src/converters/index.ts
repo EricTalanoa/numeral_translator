@@ -7,7 +7,6 @@ import * as mayan from './mayan'
 import * as chineseRod from './chinese-rod'
 import * as chineseTraditional from './chinese-traditional'
 import * as glagolitic from './glagolitic'
-import * as oldChurchSlavonic from './old-church-slavonic'
 import type { BreakdownToken } from './types'
 
 export type { BreakdownToken } from './types'
@@ -31,5 +30,4 @@ export const CONVERTERS: Converter[] = [
   { id: 'chineseRod',         label: 'Chinese Rod',           maxValue: 999_999,   ...chineseRod },
   { id: 'chineseTraditional', label: 'Chinese Traditional',   maxValue: 9_999_999, ...chineseTraditional },
   { id: 'glagolitic',         label: 'Glagolitic',            maxValue: 9_999,     ...glagolitic },
-  { id: 'oldChurchSlavonic',  label: 'Old Church Slavonic',   maxValue: 9_999,     ...oldChurchSlavonic },
 ]
