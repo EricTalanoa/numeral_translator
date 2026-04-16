@@ -1,3 +1,5 @@
+import type { BreakdownToken } from './types'
+
 // Classical Chinese literary numerals (文言數字) — multiplicative additive
 // Digit characters (一–九) multiply place-value characters (十/百/千/萬).
 // 零 bridges a run of zero digits between non-zero digits.
@@ -109,4 +111,38 @@ export function toArabic(s: string): number {
   const remainderValue = remainderStr.length > 0 ? parseSubGroup(remainderStr) : 0
 
   return wanValue + remainderValue
+}
+
+export function explain(n: number): BreakdownToken[] {
+  if (!Number.isInteger(n)) throw new Error('Input must be an integer')
+  if (n < 0 || n > 9_999_999) throw new Error(`Out of range: ${n}`)
+  if (n === 0) return []
+
+  const TIERS: [number, string][] = [
+    [1_000_000, '百萬'],
+    [100_000,   '十萬'],
+    [10_000,    '萬'  ],
+    [1_000,     '千'  ],
+    [100,       '百'  ],
+    [10,        '十'  ],
+    [1,         ''    ],
+  ]
+
+  const tokens: BreakdownToken[] = []
+  let remaining = n
+  for (const [placeValue, placeChar] of TIERS) {
+    const digit = Math.floor(remaining / placeValue)
+    if (digit > 0) {
+      tokens.push({ display: DIGITS[digit] + placeChar, value: digit * placeValue })
+      remaining %= placeValue
+    }
+  }
+
+  // Apply leading-一 rule: if the first token's display starts with 一十, drop the 一
+  // (mirrors fromArabic which strips leading 一 before 十)
+  if (tokens.length > 0 && tokens[0].display.startsWith('一十')) {
+    tokens[0] = { ...tokens[0], display: tokens[0].display.slice(1) }
+  }
+
+  return tokens
 }

@@ -1,5 +1,6 @@
 import { describe, it, expect } from 'vitest'
 import { fromArabic, toArabic } from '../../src/converters/chinese-traditional'
+import { explain } from '../../src/converters/chinese-traditional'
 
 describe('Chinese Traditional — fromArabic', () => {
   it('0 returns ∅',                    () => expect(fromArabic(0)).toBe('\u2205'))
@@ -42,4 +43,22 @@ describe('Chinese Traditional — toArabic', () => {
   })
 
   it('throws on fractions', () => expect(() => toArabic('三.五')).toThrow())
+})
+
+describe('Chinese Traditional — explain', () => {
+  it('returns [] for 0', () => expect(explain(0)).toEqual([]))
+  it('1 → [{一, 1}]', () => expect(explain(1)).toEqual([{ display: '一', value: 1 }]))
+  it('10 → [{十, 10}]', () => expect(explain(10)).toEqual([{ display: '十', value: 10 }]))
+  it('42 → [{四十,40},{二,2}]', () => expect(explain(42)).toEqual([
+    { display: '四十', value: 40 },
+    { display: '二',   value: 2  },
+  ]))
+  it('tokens sum to 1492', () => {
+    expect(explain(1492).reduce((a, t) => a + t.value, 0)).toBe(1492)
+  })
+  it('1492 → 4 tokens', () => expect(explain(1492)).toHaveLength(4))
+  it('tokens sum to 10000', () => {
+    expect(explain(10000).reduce((a, t) => a + t.value, 0)).toBe(10000)
+  })
+  it('throws on out-of-range', () => expect(() => explain(10_000_000)).toThrow('Out of range'))
 })
