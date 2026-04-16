@@ -30,6 +30,8 @@ function systemHint(systemName: string): string {
       return 'Classical Chinese numerals use characters: 一(1) 二(2) 三(3) 四(4) 五(5) 六(6) 七(7) 八(8) 九(9) 十(10) 百(100) 千(1000) 萬(10000). Numbers are written largest-to-smallest; 零 marks a zero gap between non-zero groups.'
     case 'Glagolitic':
       return 'Glagolitic numerals use Glagolitic script letters additively, largest to smallest. The first 9 letters equal 1\u20139, the next 9 equal 10\u201390, the next 9 equal 100\u2013900, and the next 9 equal 1000\u20139000.'
+    case 'Old Church Slavonic':
+      return 'Old Church Slavonic numerals use Cyrillic letters additively, largest to smallest. \u0410=1 \u0412=2 \u0413=3 \u0414=4 \u0404=5 \u0405=6 \u0417=7 \u0418=8 \u0472=9, then \u0406=10 \u041A=20\u2026\u0427=90, \u0420=100\u2026\u0426=900, and \u0482 prefixes thousands (\u0482\u0410=1000).'
     default:
       return 'Identify the numeral value shown in the image.'
   }
