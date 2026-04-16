@@ -334,7 +334,7 @@ body {
   box-shadow: 0 0 40px rgba(201, 168, 76, 0.25);
   max-width: 90vw;
   max-height: 90vh;
-  overflow: auto;
+  overflow: hidden;
 }
 
 .tile-modal-system-name {
@@ -352,9 +352,10 @@ body {
 }
 
 .tile-modal-content--breakdown {
+  flex: 1;
+  min-height: 0;
   align-items: flex-start;
   justify-content: flex-start;
-  max-height: 55vh;
   overflow-y: auto;
   width: 100%;
 }
