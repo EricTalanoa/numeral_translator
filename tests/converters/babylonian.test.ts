@@ -1,5 +1,6 @@
 import { describe, it, expect } from 'vitest'
 import { fromArabic, toArabic } from '../../src/converters/babylonian'
+import { explain } from '../../src/converters/babylonian'
 
 describe('Babylonian — fromArabic', () => {
   it('0 → ∅', () => expect(fromArabic(0)).toBe('\u2205'))
@@ -39,4 +40,24 @@ describe('Babylonian — round-trips', () => {
   for (const n of cases) {
     it(`round-trip ${n}`, () => expect(toArabic(fromArabic(n))).toBe(n))
   }
+})
+
+describe('Babylonian — explain', () => {
+  it('returns [] for 0', () => expect(explain(0)).toEqual([]))
+  it('1 → [{1 in the 1s place, 1}]', () => {
+    expect(explain(1)).toEqual([{ display: '1 in the 1s place', value: 1 }])
+  })
+  it('60 → [{1 in the 60s place, 60}]', () => {
+    expect(explain(60)).toEqual([{ display: '1 in the 60s place', value: 60 }])
+  })
+  it('tokens sum to 1492', () => {
+    expect(explain(1492).reduce((a, t) => a + t.value, 0)).toBe(1492)
+  })
+  it('1492 has two groups (24×60 + 52)', () => {
+    const tokens = explain(1492)
+    expect(tokens).toHaveLength(2)
+    expect(tokens[0]).toEqual({ display: '24 in the 60s place', value: 1440 })
+    expect(tokens[1]).toEqual({ display: '52 in the 1s place', value: 52 })
+  })
+  it('throws on out-of-range', () => expect(() => explain(1_000_000)).toThrow('Out of range'))
 })

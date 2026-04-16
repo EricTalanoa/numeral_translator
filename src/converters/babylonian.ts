@@ -1,3 +1,5 @@
+import type { BreakdownToken } from './types'
+
 // Babylonian sexagesimal (base-60) numerals.
 // fromArabic returns pipe-separated group values: e.g. "1|6|39" for 3999.
 // toArabic parses that encoding back to an integer.
@@ -32,4 +34,25 @@ export function toArabic(input: string): number {
     result = result * 60 + group
   }
   return result
+}
+
+export function explain(n: number): BreakdownToken[] {
+  if (!Number.isInteger(n)) throw new Error('Input must be an integer')
+  if (n < 0 || n > 999_999) throw new Error(`Out of range: ${n}`)
+  if (n === 0) return []
+
+  const groups: number[] = []
+  let remaining = n
+  while (remaining > 0) {
+    groups.unshift(remaining % 60)
+    remaining = Math.floor(remaining / 60)
+  }
+
+  return groups.map((digit, i) => {
+    const placeValue = Math.pow(60, groups.length - 1 - i)
+    return {
+      display: `${digit} in the ${placeValue}s place`,
+      value: digit * placeValue,
+    }
+  }).filter(t => t.value > 0)
 }
