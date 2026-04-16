@@ -1,5 +1,6 @@
 import { describe, it, expect } from 'vitest'
 import { fromArabic, toArabic } from '../../src/converters/chinese-rod'
+import { explain } from '../../src/converters/chinese-rod'
 
 // Vertical rods (even positions: ones=0, hundreds=2, ...)
 const V1 = '\u{1D360}'; const V2 = '\u{1D361}'; const V3 = '\u{1D362}'
@@ -48,4 +49,30 @@ describe('Chinese Rod — unused vars sanity check', () => {
   // Ensure V3 and V4 are referenced (used in 1234 test above via explicit literals)
   it('V3 is vert-3', () => expect(V3).toBe('\u{1D362}'))
   it('V4 is vert-4', () => expect(V4).toBe('\u{1D363}'))
+})
+
+describe('Chinese Rod — explain', () => {
+  it('returns [] for 0', () => expect(explain(0)).toEqual([]))
+  it('1 → [{vertical-1 (×1), 1}]', () => {
+    expect(explain(1)).toEqual([{ display: 'vertical-1 (×1)', value: 1 }])
+  })
+  it('10 → [{horizontal-1 (×10), 10}]', () => {
+    expect(explain(10)).toEqual([{ display: 'horizontal-1 (×10)', value: 10 }])
+  })
+  it('tokens sum to 42', () => {
+    expect(explain(42).reduce((a, t) => a + t.value, 0)).toBe(42)
+  })
+  it('1492 has four tokens', () => {
+    const tokens = explain(1492)
+    expect(tokens).toEqual([
+      { display: 'horizontal-1 (×1000)', value: 1000 },
+      { display: 'vertical-4 (×100)',   value: 400  },
+      { display: 'horizontal-9 (×10)',  value: 90   },
+      { display: 'vertical-2 (×1)',     value: 2    },
+    ])
+  })
+  it('zero digit is skipped (101 has two tokens)', () => {
+    expect(explain(101)).toHaveLength(2)
+  })
+  it('throws on out-of-range', () => expect(() => explain(1_000_000)).toThrow('Out of range'))
 })
