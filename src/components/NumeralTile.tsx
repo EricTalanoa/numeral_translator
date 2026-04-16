@@ -1,8 +1,6 @@
 import { useState, useEffect } from 'react'
 import type { Converter, BreakdownToken } from '../converters/index'
-import { MayanSvg } from '../renderers/MayanSvg'
-import { BabylonianSvg } from '../renderers/BabylonianSvg'
-import { ChineseRodSvg } from '../renderers/ChineseRodSvg'
+import { NumeralDisplay } from './NumeralDisplay'
 
 interface NumeralTileProps {
   system: Converter
@@ -30,7 +28,7 @@ export function NumeralTile({ system, value }: NumeralTileProps) {
 
   useEffect(() => {
     if (!expanded) {
-      setView('numeral')  // reset tab on close
+      setView('numeral')
       return
     }
     function handleKey(e: KeyboardEvent) {
@@ -44,29 +42,9 @@ export function NumeralTile({ system, value }: NumeralTileProps) {
   const canBreakdown = value !== null && !outOfRange && value !== 0
 
   function renderContent(scale = 1): JSX.Element {
-    if (value === null) {
-      return <span className="tile-placeholder">—</span>
-    }
-    if (outOfRange) {
-      return <span className="tile-no-rep">out of range</span>
-    }
-    const output = system.fromArabic(value)
-    if (output === '∅') {
-      return <span className="tile-no-rep">No representation</span>
-    }
-    if (system.id === 'mayan') {
-      return <MayanSvg encoded={output} scale={scale} />
-    }
-    if (system.id === 'babylonian') {
-      return <BabylonianSvg encoded={output} scale={scale} />
-    }
-    if (system.id === 'chineseRod') {
-      return <ChineseRodSvg encoded={output} scale={scale} />
-    }
-    if ((system.id === 'egyptian' || system.id === 'oldChurchSlavonic') && !fontReady) {
-      return <span className="tile-loading">Loading font…</span>
-    }
-    return <span className={`tile-numeral ${system.id}`}>{output}</span>
+    if (value === null) return <span className="tile-placeholder">—</span>
+    if (outOfRange) return <span className="tile-no-rep">out of range</span>
+    return <NumeralDisplay system={system} value={value} scale={scale} fontReady={fontReady} />
   }
 
   function renderModalNumeralContent(): JSX.Element {
@@ -80,7 +58,7 @@ export function NumeralTile({ system, value }: NumeralTileProps) {
         </div>
       )
     }
-    return renderContent(3)
+    return <NumeralDisplay system={system} value={value!} scale={3} fontReady={fontReady} />
   }
 
   function renderBreakdown(): JSX.Element {
