@@ -2,7 +2,7 @@
 
 ## How the System Works
 
-The Maya used a **vigesimal (base-20) positional** numeral system — one of the earliest fully positional systems with a genuine zero. The system was used for arithmetic, astronomical calculations, and the Long Count calendar.
+The Maya used a **vigesimal (base-20) positional** numeral system with one irregularity — one of the earliest fully positional systems with a genuine zero. The system was used for arithmetic, astronomical calculations, and the Long Count calendar.
 
 **Basic symbols:**
 | Symbol | Value | Appearance |
@@ -23,31 +23,36 @@ Numbers 0–19 are composed from dots and bars:
 | 15 | 3 bars |
 | 16–19 | 3 bars + 1–4 dots |
 
-**Positional structure (pure mathematical system, base-20):**
+**Positional structure — Long Count place values:**
 
-| Position | Place value |
-|---|---|
-| 0 (bottom) | 1 |
-| 1 | 20 |
-| 2 | 400 |
-| 3 | 8,000 (beyond range) |
+| Position | Name | Place value | Base step |
+|---|---|---|---|
+| 0 (bottom) | k'in | 1 | — |
+| 1 | winal | 20 | ×20 |
+| 2 | tun | 360 | ×18 (18 winals = 1 tun) |
+| 3 | k'atun | 7,200 | ×20 |
+| 4 | b'ak'tun | 144,000 | ×20 |
+
+The winal→tun step is **×18**, not ×20 — this is the key irregularity. All other steps are ×20.
 
 Numbers are written **vertically**, with the lowest place at the bottom and higher places stacked above.
 
-**This app uses the pure mathematical base-20 system** (not the Long Count calendar, which uses ×18 for the second position). See [[Design Decisions#DD-010]].
+See [[Design Decisions#DD-010]].
 
 ---
 
 ## Converter Output Format
 
-`fromArabic` returns a **comma-separated string of vigesimal digits**, highest place first:
+`fromArabic` returns a **comma-separated string of digits**, highest place first:
 
 ```
-fromArabic(3999) → "9,19,19"    // 9×400 + 19×20 + 19
-fromArabic(20)   → "1,0"        // 1×20 + 0
-fromArabic(19)   → "19"         // just ones place
-fromArabic(0)    → "shell"      // special zero sentinel
-fromArabic(1)    → "1"
+fromArabic(3999)   → "11,1,19"        // 11×360 + 1×20 + 19
+fromArabic(360)    → "1,0,0"          // 1 tun
+fromArabic(400)    → "1,2,0"          // 1×360 + 2×20 + 0
+fromArabic(20)     → "1,0"            // 1×20 + 0
+fromArabic(19)     → "19"             // just ones place
+fromArabic(0)      → "shell"          // special zero sentinel
+fromArabic(999999) → "6,18,17,13,19" // max value
 ```
 
 The `MayanSvg` component parses this and renders each digit as dots-and-bars, stacking them vertically.
@@ -63,9 +68,20 @@ if n === 0: return "shell"
 
 digits = []
 remaining = n
-while remaining > 0:
-    digits.unshift(remaining % 20)    // prepend (highest place first)
-    remaining = Math.floor(remaining / 20)
+
+// k'in (pos 0): base 20
+digits.unshift(remaining % 20)
+remaining = floor(remaining / 20)
+
+if remaining > 0:
+    // winal (pos 1): base 18
+    digits.unshift(remaining % 18)
+    remaining = floor(remaining / 18)
+
+    // tun and higher (pos 2+): base 20
+    while remaining > 0:
+        digits.unshift(remaining % 20)
+        remaining = floor(remaining / 20)
 
 return digits.join(',')
 ```
@@ -76,22 +92,27 @@ return digits.join(',')
 if input === "shell": return 0
 
 digits = input.split(',').map(Number)
-result = 0
-for each digit in digits:
-    result = result * 20 + digit
-return result
+n = digits.length
+
+place_value(pos_from_right):
+    if pos == 0: return 1
+    if pos == 1: return 20
+    return 360 * 20^(pos - 2)
+
+return sum of digits[i] * place_value(n - 1 - i)
 ```
+
+Validation: winal digit (second from right) must be 0–17; all others 0–19.
 
 ---
 
 ## Known Edge Cases
 
-- **Zero exists**: Mayan is the only system in this app with a genuine zero representation. `fromArabic(0)` returns `"shell"` (not `"∅"`).
-- **No fractions**: Mayan did not use this system for fractions. See [[Design Decisions#DD-003]].
-- **Maximum in range**: 3,999 = [9][19][19]₂₀ (three positions)
-- **Intermediate zeros**: 400 = [1][0][0] → `"1,0,0"`. `MayanSvg` must render a shell glyph for a 0-digit within a multi-digit number.
+- **Zero exists**: Mayan is the only system in this app with a genuine zero. `fromArabic(0)` returns `"shell"` (not `"∅"`).
+- **No fractions**: out of scope for v1. See [[Design Decisions#DD-003]].
+- **Winal max is 17**: Unlike all other positions (max digit 19), the winal position caps at 17. `toArabic` throws on winal ≥ 18.
+- **Intermediate zeros**: 360 = [1][0][0] → `"1,0,0"`. `MayanSvg` renders a shell glyph for 0-digits inside multi-digit numbers.
 - **Max single digit**: 19 (3 bars + 4 dots). No digit can be 20 or above.
-- **Calendar confusion**: The Long Count uses ×18 for position 1, not ×20. Our system is purely mathematical. Tests should verify 360 ≠ 18×20 in our system (360 = 18×20 in calendar; in our system, 360 = [18][0]).
 
 ---
 
@@ -112,7 +133,7 @@ The `MayanSvg` component receives the comma-separated encoded string and renders
 
 **Multi-digit layout:**
 - Digits stacked vertically, highest digit at top
-- Separator line or gap between digits
+- Gap between digit cells
 - Container grows upward with digit count
 
 **Digit cells** for reference:
@@ -134,16 +155,18 @@ The `MayanSvg` component receives the comma-separated encoded string and renders
 
 | Arabic | Encoded | Breakdown |
 |---|---|---|
-| 0 | shell | zero — Mayan has genuine zero |
+| 0 | shell | zero — genuine Mayan zero |
 | 1 | "1" | single dot |
 | 5 | "5" | single bar |
 | 19 | "19" | three bars + four dots |
 | 20 | "1,0" | 1×20 + 0 |
 | 21 | "1,1" | 1×20 + 1 |
 | 40 | "2,0" | 2×20 + 0 |
-| 400 | "1,0,0" | 1×400 + 0 + 0 — tests intermediate zeros |
-| 819 | "2,0,19" | 2×400 + 0×20 + 19 — tests zero in middle position |
-| 3999 | "9,19,19" | maximum |
+| 360 | "1,0,0" | 1 tun (1×360) |
+| 400 | "1,2,0" | 1×360 + 2×20 + 0 |
+| 819 | "2,4,19" | 2×360 + 4×20 + 19 |
+| 3999 | "11,1,19" | 11×360 + 1×20 + 19 |
+| 999999 | "6,18,17,13,19" | maximum value |
 
 ---
 
@@ -160,4 +183,4 @@ Mayan numerals have no reliable Unicode representation. The Unicode character U+
 - [[Rendering Strategy]] — dot/bar/shell SVG geometry
 - [[Agent Map]] — Renderer agent owns MayanSvg.tsx
 - [[Converter Interface]] — comma-separated output format contract
-- [[Design Decisions#DD-010]] — pure base-20, not Long Count calendar
+- [[Design Decisions#DD-010]] — Long Count positional system

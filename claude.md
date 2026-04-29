@@ -1,12 +1,9 @@
 # Numeral Translator — Claude Code Session Guide
 
 ## Current Status
-**Phases 4+5 complete.** 1529/1529 tests passing. TypeScript clean.
+**Phases 4+5+6 complete + Mayan Long Count bugfix.** 575 tests passing. TypeScript clean.
 On `main` branch.
-**Next: Phase 6 Quiz Mode** — spec and plan already written, ready to implement.
-- Spec: `docs/superpowers/specs/2026-04-15-quiz-mode-design.md`
-- Plan: `docs/superpowers/plans/2026-04-15-quiz-mode.md`
-- Start with Task 1 (NumeralDisplay extraction) using subagent-driven-development.
+**Next: Phase 7** — Per-language history pages with images (stretch goal, not yet planned).
 
 ## What this project is
 A React + Vite + TypeScript web app that translates Arabic integers into
@@ -38,7 +35,7 @@ Open `obsidian/` as a vault in Obsidian, or read these files in order:
 - **Phase 3** ✅ QA + new systems — 9 systems, 435 tests, all QA tasks complete
 - **Phase 4** ✅ Breakdown tab (explain() on all 10 converters) + OCS converter + Chinese Rod SVG — 547 tests
 - **Phase 5** ✅ Photo/Vision mode removed; modal layout fixed
-- **Phase 6** ⬜ Quiz mode (stretch goal)
+- **Phase 6** ✅ Quiz mode — NumeralDisplay extraction, QuizControls, QuizPanel, App wiring — 571 tests
 - **Phase 7** ⬜ Per-language history pages with images (stretch goal)
 
 ## Plans live here

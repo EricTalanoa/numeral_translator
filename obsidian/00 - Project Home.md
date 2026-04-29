@@ -1,7 +1,7 @@
 # Numeral Translator — Project Home
 
-## Status: Phase 6 Complete — 571/571 tests passing; Phase 7 (history pages) next
-**Last updated:** 2026-04-16
+## Status: Phase 6 Complete + Mayan Long Count bugfix — 575/575 tests passing; Phase 7 (history pages) next
+**Last updated:** 2026-04-29
 
 ---
 
@@ -29,13 +29,21 @@
 `https://github.com/EricTalanoa/numeral_translator.git`
 
 ## Current Blockers
-- None. Phase 6 (Quiz Mode) complete and merged to main. 571/571 tests passing.
+- None. Mayan Long Count bugfix complete. 575/575 tests passing.
   Next: Phase 7 — Per-language history pages (stretch goal, not yet planned).
 
 ---
 
 ## Session Log
 *(Newest at top — append only)*
+
+### 2026-04-29 — Mayan Long Count bugfix
+- **Bug:** Mayan converter used pure base-20 (place values 1, 20, 400, …) — historically incorrect
+- **Fix:** Switched to Long Count positional system (1 · 20 · 360 · 7,200 · 144,000): winal→tun step is ×18, all others ×20
+- Updated `src/converters/mayan.ts` — `fromArabic`, `toArabic`, `explain`
+- Updated `tests/converters/mayan.test.ts` — all test cases corrected; winal-max-17 validation test added; round-trip set extended
+- Updated DD-010, Mayan.md, and CLAUDE.md to reflect Long Count decision
+- **575/575 tests passing. TypeScript clean. Pushed to main.**
 
 ### 2026-04-16 — Phase 6 Quiz Mode complete and merged to main
 - **NumeralDisplay** extracted from NumeralTile into shared component — 7 tests

@@ -94,10 +94,10 @@ A log of every non-obvious choice made during planning, with rationale. Decision
 
 ---
 
-## DD-010 — Mayan: Pure Base-20, Not Long Count Calendar
+## DD-010 — Mayan: Long Count Positional System (revised 2026-04-29)
 
-**Decision:** The Mayan converter implements the pure vigesimal (base-20) mathematical system, not the Long Count calendar system.
+**Decision:** The Mayan converter implements the Long Count positional system, not a hypothetical "pure base-20."
 
-**Why:** The Long Count calendar uses a modified base (the second position is ×18 instead of ×20, giving a 360-day tun). For a number translation tool, the pure mathematical base-20 system is more coherent and pedagogically cleaner. The calendar variant would require date-context the app doesn't have.
+**Why:** The pure base-20 framing was historically incorrect. Mayan place values are 1 · 20 · 360 · 7,200 · 144,000 — the winal→tun step is ×18 (18 winals = 1 tun = 360 days), all other steps are ×20. This is the system actually used by the Maya for arithmetic and astronomy. Implementing "pure" base-20 would be a fictional construct.
 
-**How to apply:** All three positional places use ×1, ×20, ×400. The maximum representable value in three places is 19×400 + 19×20 + 19 = 7,999, well above our 3,999 ceiling.
+**How to apply:** `fromArabic` extracts k'in (mod 20), then winal (mod 18), then tun and above (mod 20 each). `toArabic` reconstructs using place values 1, 20, 360, 7,200, 144,000. The winal digit is validated 0–17. Example: 3999 → `"11,1,19"` (11×360 + 1×20 + 19).
